@@ -1,3 +1,3 @@
-import ProjectsCard from "./components/Card";
+import ProjectsCard from "./components/ProjectsCard";
 
 export { ProjectsCard };
