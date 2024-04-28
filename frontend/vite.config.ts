@@ -8,6 +8,7 @@ export default defineConfig({
     proxy: {
       "/api": {
         target: "http://localhost:5000",
+        rewrite: (path) => path.replace(/^\/api/, ""),
       },
     },
   },
@@ -24,6 +25,7 @@ export default defineConfig({
       "@contexts": path.resolve(__dirname, "./src/contexts"),
       "@hooks": path.resolve(__dirname, "./src/hooks"),
       "@customTypes": path.resolve(__dirname, "./src/types"),
+      "@interfaces": path.resolve(__dirname, "./src/interfaces"),
     },
   },
 });

@@ -18,6 +18,7 @@
       "@contexts/*": ["./contexts/*"],
       "@hooks/*": ["./hooks/*"],
       "@customTypes/*": ["./types/*"],
+      "@interfaces/*": ["./interfaces/*"],
       "@/*": ["./src/*"]
     },
     /* Bundler mode */
