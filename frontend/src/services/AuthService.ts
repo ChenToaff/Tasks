@@ -1,3 +1,4 @@
+import IPerson from "@interfaces/IPerson";
 import axios from "axios";
 
 const API_URL = "/api/auth";
@@ -8,13 +9,13 @@ export interface Credentials {
 }
 
 class AuthService {
-  async login(credentials: Credentials): Promise<boolean> {
+  async login(credentials: Credentials): Promise<IPerson | null> {
     try {
       const response = await axios.post(`${API_URL}/login`, credentials);
-      return response.data.isAuthenticated;
+      return response.data.user;
     } catch (error) {
       console.error("Login failed", error);
-      return false;
+      return null;
     }
   }
 
@@ -26,13 +27,13 @@ class AuthService {
     }
   }
 
-  async checkAuthStatus(): Promise<boolean> {
+  async checkAuthStatus(): Promise<IPerson | null> {
     try {
       const response = await axios.get(`${API_URL}/status`);
-      return response.data.isAuthenticated;
+      return response.data.user;
     } catch (error) {
       console.error("Authentication check failed", error);
-      return false;
+      return null;
     }
   }
 }
