@@ -2,18 +2,25 @@ import { Box, Container, Typography } from "@mui/material";
 import { PeopleCard } from "@features/people";
 import { ProjectsCard } from "@features/projects";
 import { TasksCard } from "@features/tasks";
+import { useAuth } from "@hooks/useAuth";
 
 export default function Home(): JSX.Element {
+  const { user } = useAuth();
+  console.log({ user });
   return (
     <Container sx={{ py: 2 }}>
       <Typography sx={{ mb: 2 }} variant="h5">
         Home
       </Typography>
       <Typography variant="h6" align="center" paragraph>
-        Saturday, March 23
+        {new Date().toLocaleDateString("en-US", {
+          weekday: "long",
+          month: "long",
+          day: "numeric",
+        })}
       </Typography>
       <Typography variant="h3" align="center" color="textPrimary" gutterBottom>
-        Good afternoon, Chen
+        Good afternoon, {user?.name}
       </Typography>
       <br />
 
