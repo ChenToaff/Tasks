@@ -2,12 +2,21 @@ import { useEffect, useState } from "react";
 import IconButton from "@mui/material/IconButton";
 import Avatar from "@mui/material/Avatar";
 import { Card, CardContent, Typography } from "@mui/material";
+import IPerson from "@interfaces/IPerson";
+import PeopleService from "@services/PeopleService";
 
 export default function PeopleCard() {
-  const [people, setPeople] = useState<string[]>([]);
+  const [people, setPeople] = useState<IPerson[]>([]);
 
   useEffect(() => {
-    setPeople(["Chen", "Omri Kuperberg"]);
+    const fetchPeople = async () => {
+      const peopleData = await PeopleService.getAllPeople();
+      if (peopleData) {
+        setPeople(peopleData);
+      }
+    };
+
+    fetchPeople();
   }, []);
 
   return (
@@ -18,7 +27,7 @@ export default function PeopleCard() {
           return (
             <IconButton onClick={() => {}} sx={{ p: 0, margin: 2 }}>
               <Avatar sx={{ width: "70px", height: "70px" }}>
-                {person
+                {person.name
                   .split(" ")
                   .map((n) => n[0])
                   .join(" ")}

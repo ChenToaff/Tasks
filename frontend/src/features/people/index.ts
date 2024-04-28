@@ -1,3 +1,3 @@
-import PeopleCard from "./components/Card";
+import PeopleCard from "./components/PeopleCard";
 
 export { PeopleCard };
