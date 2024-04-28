@@ -1,4 +1,5 @@
 import DrawerHeader from "@components/DrawerHeader";
+import Loading from "@components/Loading";
 import SideMenu from "@components/SideMenu";
 import TopBar from "@components/TopBar";
 import { Box, CssBaseline } from "@mui/material";
@@ -21,7 +22,7 @@ export default function MainLayout(): JSX.Element {
           <SideMenu />
           <Box component="main" sx={{ overflow: "auto", flexGrow: 1, p: 3 }}>
             <DrawerHeader />
-            <Suspense fallback={<p>Loading...</p>}>
+            <Suspense fallback={<Loading />}>
               <Outlet />
             </Suspense>
           </Box>

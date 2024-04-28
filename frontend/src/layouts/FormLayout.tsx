@@ -1,15 +1,15 @@
+import Loading from "@components/Loading";
 import { Box, CssBaseline, Container } from "@mui/material";
 import React, { Suspense } from "react";
+import { Outlet } from "react-router-dom";
 
-export default function FormLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}): JSX.Element {
+export default function FormLayout(): JSX.Element {
   return (
-    <Container maxWidth="xs">
+    <Container maxWidth="xs" sx={{ marginTop: 8 }}>
       <CssBaseline />
-      <Suspense fallback={<p>Loading...</p>}>{children}</Suspense>
+      <Suspense fallback={<Loading />}>
+        <Outlet />
+      </Suspense>{" "}
     </Container>
   );
 }
