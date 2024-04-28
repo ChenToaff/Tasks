@@ -62,9 +62,8 @@ export default function SideMenu() {
   const [open, setOpen] = useState(true);
   const navigate = useNavigate();
   const navigation: { [key: string]: string } = {
-    Home: "Home",
-    "My Tasks": "Tasks",
-    Views: "",
+    Home: "home",
+    "My Tasks": "tasks",
   };
 
   const handleDrawerClose = () => {
