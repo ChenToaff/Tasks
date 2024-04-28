@@ -7,4 +7,4 @@ router.post("/login", authController.login);
 router.get("/logout", authController.logout);
 router.get("/status", authController.checkStatus);
 
-module.exports = router;
+export default router;
