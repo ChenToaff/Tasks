@@ -6,8 +6,10 @@ import passport from "passport";
 import RedisStore from "connect-redis";
 import redisClient from "./db/redisClient";
 import connectMongo from "./db/mongoConfig";
+import "./config/passportConfig";
 
 connectMongo();
+redisClient.connect();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
