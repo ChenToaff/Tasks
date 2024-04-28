@@ -3,6 +3,7 @@ import PersonModel from "../models/PeopleModel";
 
 import bcrypt from "bcryptjs";
 import { validatePassword } from "../utils/validations";
+import { Schema } from "mongoose";
 
 interface CreatePersonData {
   name: string;
@@ -16,12 +17,28 @@ interface UpdatePersonData {
   password?: string;
 }
 
+// Function to resolve usernames to _ids
+export const getUserIds = async (
+  usernames: string[]
+): Promise<Schema.Types.ObjectId[]> => {
+  const users = await PersonModel.find({
+    username: { $in: usernames },
+  }).select<IPerson>("_id");
+  return users.map<Schema.Types.ObjectId>((user) => user._id);
+};
+
 export const findAllPeople = async (): Promise<IPerson[]> => {
-  return await PersonModel.find();
+  return await PersonModel.find().select("username name").lean();
 };
 
 export const findPersonById = async (id: string): Promise<IPerson | null> => {
-  return await PersonModel.findById(id);
+  return await PersonModel.findById(id).lean<IPerson>();
+};
+
+export const findPersonByUsername = async (
+  username: string
+): Promise<IPerson | null> => {
+  return await PersonModel.findOne({ username });
 };
 
 export const createPerson = async (
@@ -39,7 +56,9 @@ export const createPerson = async (
     username: data.username,
     passwordHash,
   });
-  return person.save();
+  const savedPerson = await person.save();
+  const { _id, __v, ...personData } = savedPerson.toObject();
+  return personData as IPerson;
 };
 
 export const updatePerson = async (
@@ -55,9 +74,16 @@ export const updatePerson = async (
   };
   delete updateData.password; // Remove plaintext password if exists
 
-  return PersonModel.findByIdAndUpdate(id, updateData, { new: true }).exec();
+  const updatedPerson = await PersonModel.findByIdAndUpdate(id, updateData, {
+    new: true,
+    select: "-_id -__v",
+  }).exec();
+  return updatedPerson;
 };
 
 export const deletePerson = async (id: string): Promise<IPerson | null> => {
-  return await PersonModel.findByIdAndDelete(id);
+  const deletedPerson = await PersonModel.findByIdAndDelete(id).select(
+    "-_id -__v"
+  );
+  return deletedPerson;
 };

@@ -13,7 +13,7 @@ export const login = (req: Request, res: Response, next: NextFunction) => {
         if (err) return next(err);
         res.json({
           message: "Logged in successfully",
-          user: { id: user.id, username: user.username },
+          user: { id: user.id, username: user.username, name: user.name },
         });
       });
     }
@@ -40,7 +40,7 @@ export const checkStatus = (req: Request, res: Response) => {
     const user = req.user as IPerson;
     res.json({
       message: "User is logged in",
-      user: { id: user.id, username: user.username },
+      user: { id: user.id, username: user.username, name: user.name },
     });
   } else {
     res.status(401).json({ message: "User is not logged in" });

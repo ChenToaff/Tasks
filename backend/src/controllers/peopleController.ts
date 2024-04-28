@@ -10,10 +10,10 @@ export const getAllPeople = asyncHandler(
   }
 );
 
-export const getPersonById = asyncHandler(
+export const getPersonByUsername = asyncHandler(
   async (req: Request, res: Response) => {
-    const { id } = req.params;
-    const person = await PeopleService.findPersonById(id);
+    const { username } = req.params;
+    const person = await PeopleService.findPersonByUsername(username);
     if (!person) {
       throw new ApiError(404, "Person not found");
     }
@@ -24,14 +24,16 @@ export const getPersonById = asyncHandler(
 export const createPerson = asyncHandler(
   async (req: Request, res: Response) => {
     const newPerson = await PeopleService.createPerson(req.body);
-    res.status(201).json(newPerson);
+    res
+      .status(201)
+      .json({ message: `${newPerson.username} was created successfully.` });
   }
 );
 
 export const updatePerson = asyncHandler(
   async (req: Request, res: Response) => {
-    const { id } = req.params;
-    const updatedPerson = await PeopleService.updatePerson(id, req.body);
+    const { username } = req.params;
+    const updatedPerson = await PeopleService.updatePerson(username, req.body);
     if (!updatedPerson) {
       throw new ApiError(404, "Person not found");
     }

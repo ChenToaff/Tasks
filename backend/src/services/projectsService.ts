@@ -5,15 +5,15 @@ import { Schema } from "mongoose";
 export const findAllProjects = async (): Promise<IProject[]> => {
   return await ProjectModel.find()
     .populate("tasks")
-    .populate("manager")
-    .populate("teamMembers");
+    .populate("creator")
+    .populate("members");
 };
 
 export const findProjectById = async (id: string): Promise<IProject | null> => {
   return await ProjectModel.findById(id)
     .populate("tasks")
-    .populate("manager")
-    .populate("teamMembers");
+    .populate("creator")
+    .populate("members");
 };
 
 export const createProject = async (
@@ -29,8 +29,8 @@ export const updateProject = async (
 ): Promise<IProject | null> => {
   return await ProjectModel.findByIdAndUpdate(id, projectData, { new: true })
     .populate("tasks")
-    .populate("manager")
-    .populate("teamMembers");
+    .populate("creator")
+    .populate("members");
 };
 
 export const deleteProject = async (id: string): Promise<IProject | null> => {
@@ -43,8 +43,8 @@ export const addTeamMember = async (
 ): Promise<IProject | null> => {
   const objectId = new Schema.Types.ObjectId(memberId); // Convert string to ObjectId
   const project = await ProjectModel.findById(projectId);
-  if (project && !project.teamMembers.includes(objectId)) {
-    project.teamMembers.push(objectId);
+  if (project && !project.members.includes(objectId)) {
+    project.members.push(objectId);
     return await project.save();
   }
   return null;
@@ -56,7 +56,7 @@ export const removeTeamMember = async (
 ): Promise<IProject | null> => {
   const project = await ProjectModel.findById(projectId);
   if (project) {
-    project.teamMembers = project.teamMembers.filter(
+    project.members = project.members.filter(
       (member) => member.toString() !== memberId
     );
     return await project.save();

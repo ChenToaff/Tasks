@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import asyncHandler from "../utils/asyncHandler";
 import { ApiError } from "../utils/ApiError";
 import * as ProjectsService from "../services/projectsService";
+import * as PeopleService from "../services/peopleService";
 import IProject from "../interfaces/IProject";
 
 // Get all projects
@@ -27,16 +28,18 @@ export const getProjectById = asyncHandler(
 // Create a new project
 export const createProject = asyncHandler(
   async (req: Request, res: Response) => {
-    const { name, description, manager, teamMembers } = req.body;
+    const { name, description, members } = req.body;
+    // Resolve usernames to _ids for manager
+    const membersIds = await PeopleService.getUserIds(members);
     try {
       const newProject = await ProjectsService.createProject({
         name,
         description,
-        manager,
-        teamMembers,
+        members: [req.user?._id, ...membersIds],
       } as IProject);
       res.status(201).json(newProject);
     } catch (error) {
+      console.log(error);
       throw new ApiError(400, "Bad Request");
     }
   }
@@ -46,13 +49,13 @@ export const createProject = asyncHandler(
 export const updateProject = asyncHandler(
   async (req: Request, res: Response) => {
     const { id } = req.params;
-    const { name, description, manager, teamMembers } = req.body;
+    const { name, description, members } = req.body;
+
     try {
       const project = await ProjectsService.updateProject(id, {
         name,
         description,
-        manager,
-        teamMembers,
+        members,
       });
 
       if (!project) {
