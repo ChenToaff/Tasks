@@ -5,7 +5,6 @@ const ProjectSchema: Schema = new Schema({
   name: { type: String, required: true },
   description: { type: String },
   tasks: [{ type: Schema.Types.ObjectId, ref: "Task" }],
-  creator: { type: Schema.Types.ObjectId, ref: "Person", required: true },
   members: [{ type: Schema.Types.ObjectId, ref: "Person" }],
 });
 

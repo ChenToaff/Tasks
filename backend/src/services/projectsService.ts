@@ -3,17 +3,11 @@ import ProjectModel from "../models/ProjectsModel";
 import { Schema } from "mongoose";
 
 export const findAllProjects = async (): Promise<IProject[]> => {
-  return await ProjectModel.find()
-    .populate("tasks")
-    .populate("creator")
-    .populate("members");
+  return await ProjectModel.find().populate("tasks").populate("members");
 };
 
 export const findProjectById = async (id: string): Promise<IProject | null> => {
-  return await ProjectModel.findById(id)
-    .populate("tasks")
-    .populate("creator")
-    .populate("members");
+  return await ProjectModel.findById(id).populate("tasks").populate("members");
 };
 
 export const createProject = async (
@@ -29,7 +23,6 @@ export const updateProject = async (
 ): Promise<IProject | null> => {
   return await ProjectModel.findByIdAndUpdate(id, projectData, { new: true })
     .populate("tasks")
-    .populate("creator")
     .populate("members");
 };
 
