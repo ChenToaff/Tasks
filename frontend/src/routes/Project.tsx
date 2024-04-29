@@ -1,3 +1,6 @@
+import Loading from "@components/Loading";
+import Kanban from "@features/tasks/components/Kanban";
+import TaskBoard from "@features/tasks/components/TasksBoard";
 import IProject from "@interfaces/IProject";
 import Typography from "@mui/material/Typography";
 import ProjectsService from "@services/ProjectsService";
@@ -6,30 +9,31 @@ import { useParams } from "react-router-dom";
 
 export default function Project() {
   const { id } = useParams();
-  const [itemData, setItemData] = useState<IProject | null>(null);
+  const [projectData, setItemData] = useState<IProject | null>(null);
 
   useEffect(() => {
     if (id) {
-      ProjectsService.getProject(id).then((data: IProject | null) =>
-        setItemData(data)
-      );
+      ProjectsService.getProject(id).then((data: IProject | null) => {
+        setItemData(data);
+      });
     }
   }, [id]);
+
+  // if (!projectData) {
+  //   return <Loading />;
+  // }
   return (
-    <Typography>
-      Project page{" "}
-      {
+    <>
+      <Typography>
+        <h1>{projectData?.name}</h1>
         <div>
-          {itemData ? (
-            <div>
-              <h1>{itemData.name}</h1>
-              <p>{itemData.description}</p>
-            </div>
-          ) : (
-            <p>Loading...</p>
-          )}
+          <div>
+            <p>{projectData?.description}</p>
+          </div>
         </div>
-      }
-    </Typography>
+      </Typography>
+      {/* <TaskBoard /> */}
+      <Kanban />
+    </>
   );
 }

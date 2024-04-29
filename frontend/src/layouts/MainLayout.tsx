@@ -2,7 +2,7 @@ import DrawerHeader from "@components/DrawerHeader";
 import Loading from "@components/Loading";
 import SideMenu from "@components/SideMenu";
 import TopBar from "@components/TopBar";
-import { Box, CssBaseline } from "@mui/material";
+import { Box, Container, CssBaseline } from "@mui/material";
 import { Suspense } from "react";
 import { Outlet } from "react-router-dom";
 
