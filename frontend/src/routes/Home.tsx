@@ -2,11 +2,10 @@ import { Box, Container, Typography } from "@mui/material";
 import { PeopleCard } from "@features/people";
 import { ProjectsCard } from "@features/projects";
 import { TasksCard } from "@features/tasks";
-import { useAuth } from "@hooks/useAuth";
+import { useUser } from "@hooks/useUser";
 
 export default function Home(): JSX.Element {
-  const { user } = useAuth();
-  console.log({ user });
+  const { user } = useUser();
   return (
     <Container sx={{ py: 2 }}>
       <Typography sx={{ mb: 2 }} variant="h5">
