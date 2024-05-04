@@ -5,4 +5,5 @@ export default interface ITask {
   status: string;
   assignedTo: string;
   dueDate: string;
+  projectId: string;
 }
