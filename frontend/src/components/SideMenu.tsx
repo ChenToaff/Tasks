@@ -5,7 +5,6 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import ListSubheader from "@mui/material/ListSubheader";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import { IconButton } from "@mui/material";
@@ -16,6 +15,7 @@ import { useState } from "react";
 import { styled, Theme, CSSObject } from "@mui/material/styles";
 import DrawerHeader from "./DrawerHeader";
 import { useNavigate } from "react-router-dom";
+import ProjectSideBarList from "@features/projects/components/ProjectSideBarList";
 const drawerWidth = 240;
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -62,8 +62,8 @@ export default function SideMenu() {
   const [open, setOpen] = useState(true);
   const navigate = useNavigate();
   const navigation: { [key: string]: string } = {
-    Home: "home",
-    "My Tasks": "tasks",
+    Home: "/home",
+    "My Tasks": "/tasks",
   };
 
   const handleDrawerClose = () => {
@@ -98,11 +98,13 @@ export default function SideMenu() {
       >
         {open ? <ChevronLeftIcon /> : <ChevronRightIcon />}
       </IconButton>
-      {/* <Button variant="contained">Contained</Button> */}
       <List>
         {Object.keys(navigation).map((key, index) => (
           <ListItem key={key} disablePadding>
-            <ListItemButton onClick={() => navigate(navigation[key])}>
+            <ListItemButton
+              onClick={() => navigate(navigation[key])}
+              selected={location.pathname === navigation[key]}
+            >
               <ListItemIcon>
                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
               </ListItemIcon>
@@ -112,7 +114,7 @@ export default function SideMenu() {
         ))}
       </List>
       <Divider />
-      <List>{open && <ListSubheader>Projects</ListSubheader>}</List>
+      <ProjectSideBarList open={open} />
       <Divider />
     </Drawer>
   );

@@ -13,6 +13,7 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { useAuth } from "@hooks/useAuth";
+import { useUser } from "@hooks/useUser";
 
 const settings = ["Profile", "Logout"];
 
@@ -38,7 +39,7 @@ function TopBar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-
+  const { user } = useUser();
   const { logout } = useAuth();
   return (
     <AppBar
@@ -89,7 +90,12 @@ function TopBar() {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar>
+                  {user?.name
+                    .split(" ")
+                    .map((n) => n[0])
+                    .join(" ")}
+                </Avatar>
               </IconButton>
             </Tooltip>
             <Menu

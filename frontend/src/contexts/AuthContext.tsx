@@ -1,21 +1,21 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect } from "react";
 import AuthService from "../services/AuthService";
 import { Credentials } from "@customTypes/credentials";
 import IPerson from "@interfaces/IPerson";
+import { useUser } from "@hooks/useUser";
 
 export interface AuthContextType {
   isAuthenticated: boolean;
   login: (credentials: Credentials) => Promise<void>;
   logout: () => Promise<void>;
   loading: boolean;
-  user: IPerson | null;
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const { setUser } = useUser();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState<IPerson | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -44,9 +44,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider
-      value={{ isAuthenticated, login, logout, loading, user }}
-    >
+    <AuthContext.Provider value={{ isAuthenticated, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );
