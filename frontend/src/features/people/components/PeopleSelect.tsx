@@ -45,8 +45,8 @@ export default function PeopleSelect({
           )}
         >
           {selectFrom.map((person) => (
-            <MenuItem key={person.name} value={person.name}>
-              {person.name}
+            <MenuItem key={person.username} value={person.username}>
+              {person.username}
             </MenuItem>
           ))}
         </Select>
