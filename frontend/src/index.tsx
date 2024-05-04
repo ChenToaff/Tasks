@@ -6,13 +6,16 @@ import Router from "./routes";
 import { AuthProvider } from "@contexts/AuthContext";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "./assets/theme";
+import { UserProvider } from "@contexts/UserContext";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <Provider store={store}>
     <ThemeProvider theme={theme}>
-      <AuthProvider>
-        <Router />
-      </AuthProvider>
+      <UserProvider>
+        <AuthProvider>
+          <Router />
+        </AuthProvider>
+      </UserProvider>
     </ThemeProvider>
   </Provider>
 );
