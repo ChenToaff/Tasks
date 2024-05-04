@@ -19,9 +19,9 @@ export default function Project() {
     }
   }, [id]);
 
-  // if (!projectData) {
-  //   return <Loading />;
-  // }
+  if (!projectData) {
+    return <Loading />;
+  }
   return (
     <>
       <Typography>
@@ -33,7 +33,7 @@ export default function Project() {
         </div>
       </Typography>
       {/* <TaskBoard /> */}
-      <Kanban />
+      <Kanban projectData={projectData} />
     </>
   );
 }
