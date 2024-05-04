@@ -1,85 +1,73 @@
-import { useEffect, useState } from "react";
-import IconButton from "@mui/material/IconButton";
 import Avatar from "@mui/material/Avatar";
-import { createSvgIcon } from "@mui/material/utils";
 import FolderIcon from "@mui/icons-material/Folder";
-import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 import {
   Button,
   Card,
   CardContent,
   CardHeader,
+  IconButton,
   List,
-  ListItem,
   ListItemAvatar,
   ListItemButton,
   ListItemText,
-  Typography,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-const PlusIcon = createSvgIcon(
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    fill="none"
-    viewBox="0 0 24 24"
-    strokeWidth={1.5}
-    stroke="currentColor"
-    className="h-6 w-6"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      d="M12 4.5v15m7.5-7.5h-15"
-    />
-  </svg>,
-  "Plus"
-);
+import { useUser } from "@hooks/useUser";
+import { wrap } from "module";
 
 export default function ProjectsCard() {
-  const [projects, setProjects] = useState<string[]>([]);
+  const { user } = useUser();
+  const projects = user?.projects ?? [];
   const navigate = useNavigate();
-  useEffect(() => {
-    setProjects(["Chen", "Omri Kuperberg"]);
-  }, []);
 
   function handleNewProjectButton() {
     navigate("/projects/new");
   }
-
   return (
     <Card>
       <CardHeader
         action={
-          <Button variant="contained" onClick={handleNewProjectButton}>
+          <IconButton onClick={handleNewProjectButton}>
             <AddIcon />
-          </Button>
+          </IconButton>
         }
-        title="My Projects"
-        // titleTypographyProps={{ variant: "h4" }}
+        title="Projects"
+        sx={{ pb: 0 }}
       />
 
-      <CardContent sx={{ minHeight: 150 }}>
-        <List>
-          <ListItemButton>
-            <ListItemAvatar>
-              <Avatar>
-                <FolderIcon />
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText primary="Project1" />
-          </ListItemButton>
-          <ListItemButton>
-            <ListItemAvatar>
-              <Avatar>
-                <FolderIcon />
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText primary="Project2" />
-          </ListItemButton>
+      <CardContent>
+        <List
+          sx={{
+            height: 200,
+            display: "flex",
+            flexWrap: "wrap",
+            overflowY: "auto",
+            alignContent: "flex-start",
+          }}
+        >
+          {projects.map((project) => (
+            <ListItemButton
+              sx={{ flex: "1 1 50%" }}
+              onClick={() => navigate(`/projects/${project.id}`)}
+            >
+              <ListItemAvatar>
+                <Avatar>
+                  <FolderIcon />
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText
+                primaryTypographyProps={{
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+                primary={project.name}
+              />
+            </ListItemButton>
+          ))}
         </List>
       </CardContent>
     </Card>
