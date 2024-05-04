@@ -20,7 +20,10 @@ export default function MainLayout(): JSX.Element {
         <TopBar />
         <Box sx={{ display: "flex", flexGrow: 1, width: "100%" }}>
           <SideMenu />
-          <Box component="main" sx={{ overflow: "auto", flexGrow: 1, p: 3 }}>
+          <Box
+            component="main"
+            sx={{ height: "100vh", flexGrow: 1, overflowY: "auto", p: 3 }}
+          >
             <DrawerHeader />
             <Suspense fallback={<Loading />}>
               <Outlet />
