@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import asyncHandler from "../utils/asyncHandler";
 import * as TasksService from "../services/tasksService";
+import * as ProjectsService from "../services/projectsService";
 import { ApiError } from "../utils/ApiError";
 import ITask from "../interfaces/ITask";
 
@@ -19,22 +20,34 @@ export const getTaskById = asyncHandler(async (req: Request, res: Response) => {
   res.json(task);
 });
 
-// Create a new task
+/**
+ * Creates a new task and adds it at the start of a specified task column.
+ *
+ * @param projectId The ID of the project.
+ * @param taskColumnId The ID of the task column within the project.
+ * @param taskData Data for creating the new task.
+ */
 export const createTask = asyncHandler(async (req: Request, res: Response) => {
-  const { title, description, status, assignedTo, dueDate } = req.body;
-  try {
-    const newTask = await TasksService.createTask({
-      title,
-      description,
-      status,
-      assignedTo,
-      dueDate,
-    } as ITask);
+  const { projectId, taskColumnId, taskData } = req.body;
 
-    res.status(201).json(newTask);
-  } catch (error) {
-    throw new ApiError(400, "Bad Request");
-  }
+  const project = await ProjectsService.findProjectById(projectId);
+  if (!project) throw new ApiError(400, "Bad Requeest: Project not found");
+
+  const taskColumn = project.taskColumns.id(taskColumnId);
+  if (!taskColumn) throw new ApiError(400, "Task column not found");
+
+  const newTask = await TasksService.createTask({
+    ...taskData,
+    projectId,
+  } as ITask);
+
+  await ProjectsService.addTaskToTaskColumn(
+    projectId,
+    taskColumnId,
+    newTask._id
+  );
+
+  res.status(201).json({ message: "Task added successfully" });
 });
 
 // Update an existing task

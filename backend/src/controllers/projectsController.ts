@@ -3,15 +3,23 @@ import asyncHandler from "../utils/asyncHandler";
 import { ApiError } from "../utils/ApiError";
 import * as ProjectsService from "../services/projectsService";
 import * as PeopleService from "../services/peopleService";
-import IProject from "../interfaces/IProject";
 
 // Get all projects
-export const getAllProjects = asyncHandler(
+export const getPersonsProjects = asyncHandler(
   async (req: Request, res: Response) => {
-    const projects = await ProjectsService.findAllProjects();
+    const projects = await PeopleService.getProjects(req.user?._id);
     res.json(projects);
   }
 );
+
+export const addColumn = asyncHandler(async (req: Request, res: Response) => {
+  const { projectId, title } = req.body;
+  const project = await ProjectsService.addColumn(projectId, title);
+  if (!project) {
+    throw new ApiError(400, "Project not found or member already added");
+  }
+  res.status(200).json(project);
+});
 
 // Get a single project by ID
 export const getProjectById = asyncHandler(
@@ -36,7 +44,25 @@ export const createProject = asyncHandler(
         name,
         description,
         members: [req.user?._id, ...membersIds],
-      } as IProject);
+        taskColumns: [
+          {
+            title: "To Do",
+            tasks: [],
+          },
+          {
+            title: "In Progress",
+            tasks: [],
+          },
+          {
+            title: "Done",
+            tasks: [],
+          },
+        ],
+      });
+      for (const personId of membersIds) {
+        await PeopleService.addProject(personId, newProject.id);
+      }
+
       res.status(201).json(newProject);
     } catch (error) {
       console.log(error);
@@ -103,3 +129,35 @@ export const deleteProject = asyncHandler(
     res.status(204).send();
   }
 );
+
+// export const updateProjectTasks = asyncHandler(
+//   async (req: Request, res: Response) => {
+//     const { id } = req.params;
+//     const { updatedTasks } = req.body;
+//     try {
+//       const project = await ProjectsService.findProjectById(id);
+//       if (!project) throw new ApiError(400, "Bad Request");
+//       project.tasks = updatedTasks;
+
+//       await project.save();
+//     } catch (error) {
+//       if (error.name === "VersionError") {
+//         // Fetch the current state of the document
+//         const currentProject = await Project.findById(projectId);
+
+//         // Inform the user of the conflict and potentially merge
+//         console.error(
+//           "Conflict detected. Your changes were based on an outdated version."
+//         );
+//         // Optionally, send back both versions to the user for a manual merge
+//         return {
+//           error: "Conflict detected",
+//           yourChanges: updatedTasks,
+//           currentVersion: currentProject,
+//         };
+//       } else {
+//         console.error("An error occurred:", error);
+//       }
+//     }
+//   }
+// );

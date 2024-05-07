@@ -1,12 +1,20 @@
 import mongoose, { Schema, Document } from "mongoose";
 import IProject from "../interfaces/IProject";
 
-const ProjectSchema: Schema = new Schema({
-  name: { type: String, required: true },
-  description: { type: String },
+const TaskColumnSchema = new Schema({
+  title: { type: String, required: true },
   tasks: [{ type: Schema.Types.ObjectId, ref: "Task" }],
-  members: [{ type: Schema.Types.ObjectId, ref: "Person" }],
 });
+
+const ProjectSchema: Schema = new Schema(
+  {
+    name: { type: String, required: true },
+    description: { type: String },
+    members: [{ type: Schema.Types.ObjectId, ref: "Person" }],
+    taskColumns: [TaskColumnSchema],
+  },
+  { optimisticConcurrency: true }
+);
 
 // Add a virtual property 'id' that's derived from '_id'.
 ProjectSchema.virtual("id").get(function (this: IProject) {

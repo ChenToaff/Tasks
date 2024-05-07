@@ -40,7 +40,12 @@ export const checkStatus = (req: Request, res: Response) => {
     const user = req.user as IPerson;
     res.json({
       message: "User is logged in",
-      user: { id: user.id, username: user.username, name: user.name },
+      user: {
+        id: user.id,
+        username: user.username,
+        name: user.name,
+        projects: user.projects,
+      },
     });
   } else {
     res.status(401).json({ message: "User is not logged in" });

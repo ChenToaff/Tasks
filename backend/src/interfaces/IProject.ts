@@ -1,8 +1,9 @@
-import { Schema, Document } from "mongoose";
+import { Schema, Document, Types } from "mongoose";
+import ITaskColumn from "./ITaskColumn";
 
 export default interface IProject extends Document {
   name: string;
   description: string;
-  tasks: Schema.Types.ObjectId[]; // Array of task references
+  taskColumns: Types.DocumentArray<ITaskColumn>;
   members: Schema.Types.ObjectId[]; // Array of Person document references
 }
