@@ -6,7 +6,7 @@ import Router from "./routes";
 import { AuthProvider } from "@contexts/AuthContext";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "./assets/theme";
-import { UserProvider } from "@contexts/UserContext";
+import { UserProvider } from "@features/user/contexts/UserContext";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <Provider store={store}>
