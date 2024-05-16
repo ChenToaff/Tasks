@@ -2,9 +2,10 @@ import IProject from "./IProject";
 import ITask from "./ITask";
 
 export default interface IPerson {
+  id: string;
   username: string;
   name: string;
   projects: IProject[];
-  friends: IPerson[];
+  Colleagues: IPerson[];
   tasks: ITask[];
 }
