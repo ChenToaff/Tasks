@@ -1,5 +1,4 @@
 import AddIcon from "@mui/icons-material/Add";
-
 import {
   Collapse,
   IconButton,
@@ -8,16 +7,16 @@ import {
   ListItemText,
 } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
-
-import { useUser } from "@hooks/useUser";
 import { useState } from "react";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 
+import { useSelector } from "react-redux";
+import { RootState } from "../../../store";
+
 export default function ProjectSideBarList({ open }: { open: boolean }) {
   if (!open) return <></>;
-  const { user } = useUser();
   const [collapsed, setCollapsed] = useState(true);
-  const projects = user?.projects ?? [];
+  const projects = useSelector((state: RootState) => state.projects.data);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -47,6 +46,7 @@ export default function ProjectSideBarList({ open }: { open: boolean }) {
         <List component="div" disablePadding>
           {projects.map((project) => (
             <ListItemButton
+              key={project.id}
               onClick={() => navigate(`/projects/${project.id}`)}
               selected={location.pathname === `/projects/${project.id}`}
             >

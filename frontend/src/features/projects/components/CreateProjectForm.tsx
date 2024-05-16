@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Button, TextField, Box } from "@mui/material";
 import IPerson from "@interfaces/IPerson";
-import PeopleSelect from "@features/people/components/PeopleSelect";
+import ColleaguesSelect from "@features/colleagues/components/ColleaguesSelect";
 import PeopleService from "@services/PeopleService";
-import ProjectsService from "@services/ProjectsService";
+import ProjectsService from "@features/projects/api/ProjectsService";
 import { useNavigate } from "react-router-dom";
 
-const NewProjectForm: React.FC = () => {
+const CreateProjectForm: React.FC = () => {
   const navigate = useNavigate();
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
@@ -58,7 +58,7 @@ const NewProjectForm: React.FC = () => {
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       />
-      <PeopleSelect
+      <ColleaguesSelect
         selected={members}
         selectFrom={people}
         setSelected={setMembers}
@@ -70,4 +70,4 @@ const NewProjectForm: React.FC = () => {
   );
 };
 
-export default NewProjectForm;
+export default CreateProjectForm;
