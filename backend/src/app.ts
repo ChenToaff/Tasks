@@ -1,34 +1,30 @@
 import express from "express";
-import errorHandler from "./middleware/errorHandler";
 import routes from "./routes";
-import session from "express-session";
 import passport from "passport";
-import RedisStore from "connect-redis";
 import redisClient from "./db/redisClient";
 import connectMongo from "./db/mongoConfig";
 import "./config/passportConfig";
+import { createServer } from "http";
+import errorHandler from "./middleware/errorHandler";
+import sessionMiddleware from "./middleware/sessionMiddleware";
+import { initializeWebsocket } from "./websocket";
+
+const PORT = process.env.PORT || 5000;
 
 connectMongo();
 redisClient.connect();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const server = createServer(app);
 
 app.use(express.json());
-app.use(
-  session({
-    store: new RedisStore({ client: redisClient }),
-    secret: "yourSecret",
-    resave: false,
-    saveUninitialized: false,
-    cookie: { secure: false }, // Set to true if running over HTTPS
-  })
-);
+app.use(sessionMiddleware);
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(routes);
 app.use(errorHandler);
+initializeWebsocket(server);
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
