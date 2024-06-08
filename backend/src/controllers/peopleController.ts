@@ -10,14 +10,27 @@ export const getAllPeople = asyncHandler(
   }
 );
 
-export const getPersonByUsername = asyncHandler(
+export const getPersonsTasks = asyncHandler(
   async (req: Request, res: Response) => {
-    const { username } = req.params;
-    const person = await PeopleService.findPersonByUsername(username);
-    if (!person) {
+    const userId = req.params.userId;
+    const start = parseInt(req.query.start as string, 10) || 0;
+    const limit = parseInt(req.query.limit as string, 10) || 10;
+    const tasks = await PeopleService.getTasks(userId, start, limit);
+    if (!tasks) {
       throw new ApiError(404, "Person not found");
     }
-    res.json(person);
+    res.json(tasks);
+  }
+);
+
+export const getPersonsColleagues = asyncHandler(
+  async (req: Request, res: Response) => {
+    const userId = req.params.userId;
+    const people = await PeopleService.getColleagues(userId);
+    if (!people) {
+      throw new ApiError(404, "Person not found");
+    }
+    res.json(people);
   }
 );
 
