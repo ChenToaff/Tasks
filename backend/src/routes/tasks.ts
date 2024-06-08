@@ -8,6 +8,6 @@ router.get("/:id", TasksController.getTaskById);
 router.post("/", TasksController.createTask);
 router.put("/:id", TasksController.updateTask);
 router.delete("/:id", TasksController.deleteTask);
-router.patch("/:id/status", TasksController.updateTaskStatus);
+router.patch("/:id/completed", TasksController.updateTaskCompleted);
 
 export default router;
