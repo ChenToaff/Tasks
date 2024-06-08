@@ -9,7 +9,7 @@ export const findTaskById = async (id: string): Promise<ITask | null> => {
   return await TaskModel.findById(id).populate("assignedTo");
 };
 
-export const createTask = async (taskData: ITask): Promise<ITask> => {
+export const createTask = async (taskData: Partial<ITask>): Promise<ITask> => {
   const newTask = new TaskModel(taskData);
   return await newTask.save();
 };
