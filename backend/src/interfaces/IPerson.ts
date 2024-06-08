@@ -1,10 +1,13 @@
 import { Document, Schema } from "mongoose";
+import ITask from "./ITask";
+import IProject from "./IProject";
 
 export default interface IPerson extends Document {
+  id: string;
   name: string;
   username: string;
   passwordHash: string;
-  projects: Schema.Types.ObjectId[];
+  projects: IProject[] | Schema.Types.ObjectId[];
   tasks: Schema.Types.ObjectId[];
-  friends: Schema.Types.ObjectId[];
+  colleagues: IPerson[] | Schema.Types.ObjectId[];
 }

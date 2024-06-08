@@ -2,8 +2,13 @@ import { Request, Response } from "express";
 import asyncHandler from "../utils/asyncHandler";
 import * as TasksService from "../services/tasksService";
 import * as ProjectsService from "../services/projectsService";
+import * as TaskColumnService from "../services/taskColumnService";
+import * as PeopleService from "../services/peopleService";
 import { ApiError } from "../utils/ApiError";
 import ITask from "../interfaces/ITask";
+import { getIO } from "../websocket";
+import { emitToUser } from "../websocket/socketManager";
+import IPerson from "../interfaces/IPerson";
 
 // Get all tasks
 export const getAllTasks = asyncHandler(async (req: Request, res: Response) => {
@@ -28,43 +33,73 @@ export const getTaskById = asyncHandler(async (req: Request, res: Response) => {
  * @param taskData Data for creating the new task.
  */
 export const createTask = asyncHandler(async (req: Request, res: Response) => {
-  const { projectId, taskColumnId, taskData } = req.body;
+  const { projectId, taskColumnId, assignedTo } = req.body;
 
-  const project = await ProjectsService.findProjectById(projectId);
-  if (!project) throw new ApiError(400, "Bad Requeest: Project not found");
-
-  const taskColumn = project.taskColumns.id(taskColumnId);
-  if (!taskColumn) throw new ApiError(400, "Task column not found");
+  let assignee = null;
 
   const newTask = await TasksService.createTask({
-    ...taskData,
-    projectId,
-  } as ITask);
-
-  await ProjectsService.addTaskToTaskColumn(
     projectId,
     taskColumnId,
-    newTask._id
-  );
+    assignedTo,
+  } as ITask);
 
-  res.status(201).json({ message: "Task added successfully" });
+  if (assignedTo) {
+    assignee = await PeopleService.findPersonById(assignedTo);
+    if (!assignee) throw new ApiError(400, "Bad Requeest: assignee not found");
+    PeopleService.addTask(assignedTo, newTask.id);
+  }
+
+  if (projectId && taskColumnId) {
+    const project = await ProjectsService.findProjectById(projectId);
+    if (!project) throw new ApiError(400, "Bad Requeest: Project not found");
+    const taskColumn = TaskColumnService.findTaskColumnById(taskColumnId);
+    if (!taskColumn) throw new ApiError(400, "Task column not found");
+    await ProjectsService.addTaskToTaskColumn(
+      projectId,
+      taskColumnId,
+      newTask._id
+    );
+    (project.members as IPerson[]).forEach((member) => {
+      emitToUser(member.id.toString(), "task_created", {
+        message: `Task created: ${newTask.id}`,
+        task: newTask,
+      });
+    });
+  }
+
+  res.status(201).json({ task: newTask });
 });
 
 // Update an existing task
 export const updateTask = asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { title, description, status, assignedTo, dueDate } = req.body;
+  const { title, description, completed, assignedTo, dueDate, projectId } =
+    req.body;
   try {
     const updatedTask = await TasksService.updateTask(id, {
       title,
       description,
-      status,
+      completed,
       assignedTo,
       dueDate,
+      projectId,
     });
     if (!updatedTask) {
       throw new ApiError(404, "Task not found");
     }
+    if (updatedTask.projectId) {
+      const project = await ProjectsService.findProjectById(
+        updatedTask.projectId
+      );
+      if (!project) throw new ApiError(400, "Bad Requeest: Project not found");
+      (project.members as IPerson[]).forEach((member) => {
+        emitToUser(member.id.toString(), "task_updated", {
+          message: `Task updated: ${updatedTask.id}`,
+          task: updatedTask,
+        });
+      });
+    }
+
     res.json(updatedTask);
   } catch (error) {
     throw new ApiError(400, "Bad Request");
@@ -78,16 +113,27 @@ export const deleteTask = asyncHandler(async (req: Request, res: Response) => {
   if (!task) {
     throw new ApiError(404, "Task not found");
   }
+  if (task.projectId) {
+    const project = await ProjectsService.findProjectById(task.projectId);
+    if (project) {
+      (project.members as IPerson[]).forEach((member) => {
+        emitToUser(member.id.toString(), "task_deleted", {
+          message: `Task deleted: ${task.id}`,
+          task: task,
+        });
+      });
+    }
+  }
   res.status(204).send();
 });
 
-// Update the status of a task
-export const updateTaskStatus = asyncHandler(
+// Update the completed field of a task
+export const updateTaskCompleted = asyncHandler(
   async (req: Request, res: Response) => {
     const { id } = req.params;
-    const { status } = req.body;
+    const { completed } = req.body;
     try {
-      const updatedTask = await TasksService.updateTask(id, { status });
+      const updatedTask = await TasksService.updateTask(id, { completed });
       if (!updatedTask) {
         throw new ApiError(404, "Task not found");
       }

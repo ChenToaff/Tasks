@@ -1,17 +1,14 @@
 import mongoose, { Schema } from "mongoose";
 import ITask from "../interfaces/ITask";
 export const TaskSchema: Schema = new Schema({
-  title: { type: String, required: true },
-  description: { type: String, required: true },
-  status: {
-    type: String,
-    required: true,
-    default: "To Do",
-    enum: ["To Do", "In Progress", "Done"],
-  },
+  title: { type: String },
+  description: { type: String },
+  completed: { type: Boolean, default: false },
   assignedTo: { type: Schema.Types.ObjectId, ref: "Person" },
   dueDate: { type: Date },
-  projectId: { type: Schema.Types.ObjectId, ref: "Project" }, // Reference to the parent project
+  projectId: { type: Schema.Types.ObjectId, ref: "Project" },
+  taskColumnId: { type: Schema.Types.ObjectId, ref: "TaskColumn" },
+  createdAt: { type: Date, default: Date.now },
 });
 
 // Add a virtual property 'id' that's derived from '_id'.

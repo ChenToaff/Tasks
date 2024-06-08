@@ -3,14 +3,10 @@ import asyncHandler from "../utils/asyncHandler";
 import { ApiError } from "../utils/ApiError";
 import * as ProjectsService from "../services/projectsService";
 import * as PeopleService from "../services/peopleService";
-
-// Get all projects
-export const getPersonsProjects = asyncHandler(
-  async (req: Request, res: Response) => {
-    const projects = await PeopleService.getProjects(req.user?._id);
-    res.json(projects);
-  }
-);
+import * as TaskColumnService from "../services/taskColumnService";
+import * as TasksService from "../services/tasksService";
+import { emitToUser } from "../websocket/socketManager";
+import IPerson from "../interfaces/IPerson";
 
 export const addColumn = asyncHandler(async (req: Request, res: Response) => {
   const { projectId, title } = req.body;
@@ -53,25 +49,22 @@ export const createProject = asyncHandler(
     const { name, description, members } = req.body;
     // Resolve usernames to _ids for manager
     const membersIds = await PeopleService.getUserIds(members);
+    membersIds.push(req.user!._id);
     try {
+      const toDoColumn = await TaskColumnService.createTaskColumn({
+        title: "To Do",
+      });
+      const inProgressColumn = await TaskColumnService.createTaskColumn({
+        title: "In Progress",
+      });
+      const DoneColumn = await TaskColumnService.createTaskColumn({
+        title: "Done",
+      });
       const newProject = await ProjectsService.createProject({
         name,
         description,
-        members: [req.user?._id, ...membersIds],
-        taskColumns: [
-          {
-            title: "To Do",
-            tasks: [],
-          },
-          {
-            title: "In Progress",
-            tasks: [],
-          },
-          {
-            title: "Done",
-            tasks: [],
-          },
-        ],
+        members: [...new Set(membersIds)],
+        taskColumns: [toDoColumn, inProgressColumn, DoneColumn],
       });
       for (const personId of membersIds) {
         await PeopleService.addProject(personId, newProject.id);
@@ -144,34 +137,37 @@ export const deleteProject = asyncHandler(
   }
 );
 
-// export const updateProjectTasks = asyncHandler(
-//   async (req: Request, res: Response) => {
-//     const { id } = req.params;
-//     const { updatedTasks } = req.body;
-//     try {
-//       const project = await ProjectsService.findProjectById(id);
-//       if (!project) throw new ApiError(400, "Bad Request");
-//       project.tasks = updatedTasks;
+export const changeTaskLocation = asyncHandler(
+  async (req: Request, res: Response) => {
+    const { projectId, taskId, destColumnId, sourceColumnId, position } =
+      req.body;
 
-//       await project.save();
-//     } catch (error) {
-//       if (error.name === "VersionError") {
-//         // Fetch the current state of the document
-//         const currentProject = await Project.findById(projectId);
+    const project = await ProjectsService.findProjectById(projectId);
+    if (!project) {
+      throw new ApiError(404, "Project not found");
+    }
 
-//         // Inform the user of the conflict and potentially merge
-//         console.error(
-//           "Conflict detected. Your changes were based on an outdated version."
-//         );
-//         // Optionally, send back both versions to the user for a manual merge
-//         return {
-//           error: "Conflict detected",
-//           yourChanges: updatedTasks,
-//           currentVersion: currentProject,
-//         };
-//       } else {
-//         console.error("An error occurred:", error);
-//       }
-//     }
-//   }
-// );
+    await ProjectsService.changeTaskLocation(
+      projectId,
+      taskId,
+      sourceColumnId,
+      destColumnId,
+      position
+    );
+
+    await TasksService.updateTask(taskId, { taskColumnId: destColumnId });
+    (project.members as IPerson[]).forEach((member) => {
+      emitToUser(member.id.toString(), "task_location_changed", {
+        message: `Task location changed`,
+        changeData: {
+          projectId,
+          taskId,
+          destColumnId,
+          sourceColumnId,
+          position,
+        },
+      });
+    });
+    res.status(200).send();
+  }
+);

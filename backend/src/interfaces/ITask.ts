@@ -4,8 +4,9 @@ export default interface ITask extends Document {
   id: string;
   title: string;
   description: string;
-  status: string;
-  assignedTo: Schema.Types.ObjectId; // Link to a Person document
+  completed: Boolean;
+  assignedTo: string;
   dueDate: Date;
   projectId: string;
+  taskColumnId: string;
 }

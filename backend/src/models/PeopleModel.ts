@@ -7,7 +7,16 @@ const PersonSchema: Schema = new Schema({
   passwordHash: { type: String, required: true },
   projects: [{ type: Schema.Types.ObjectId, ref: "Project" }],
   tasks: [{ type: Schema.Types.ObjectId, ref: "Task" }],
-  friends: [{ type: Schema.Types.ObjectId, ref: "Person" }],
+  colleagues: [{ type: Schema.Types.ObjectId, ref: "Person" }],
 });
+
+// Add a virtual property 'id' that's derived from '_id'.
+PersonSchema.virtual("id").get(function (this: IPerson) {
+  return this._id.toHexString();
+});
+
+// Ensure virtuals are included when converting a document to JSON/objects
+PersonSchema.set("toJSON", { virtuals: true });
+PersonSchema.set("toObject", { virtuals: true });
 
 export default mongoose.model<IPerson>("Person", PersonSchema);
