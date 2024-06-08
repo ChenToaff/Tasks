@@ -21,6 +21,20 @@ export const addColumn = asyncHandler(async (req: Request, res: Response) => {
   res.status(200).json(project);
 });
 
+export const getAllProjects = asyncHandler(
+  async (req: Request, res: Response) => {
+    const userId = req.user!.id;
+    const start = parseInt(req.query.start as string, 10) || 0;
+    const limit = parseInt(req.query.limit as string, 10) || 10;
+
+    const projects = await PeopleService.getProjects(userId, start, limit);
+    if (!projects) {
+      throw new ApiError(404, "Person not found");
+    }
+    res.json(projects);
+  }
+);
+
 // Get a single project by ID
 export const getProjectById = asyncHandler(
   async (req: Request, res: Response) => {
