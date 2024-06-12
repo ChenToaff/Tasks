@@ -66,9 +66,6 @@ export function updateTaskInProject(
       const taskIndex = project.taskColumns[columnIndex].tasks.findIndex(
         (t) => t.id === taskToUpdate.id
       );
-      project.taskColumns[columnIndex].tasks.map((t) =>
-        console.log({ t: t.id, t2: taskToUpdate.id })
-      );
 
       if (taskIndex !== -1) {
         project.taskColumns[columnIndex].tasks[taskIndex] = taskToUpdate;
