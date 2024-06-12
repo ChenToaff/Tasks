@@ -1,3 +1,4 @@
+import ChangeTaskLocationProps from "@customTypes/changeTaskLocationProps";
 import IProject from "@interfaces/IProject";
 import axios from "axios";
 
@@ -6,22 +7,13 @@ const API_URL = "/api/projects";
 class ProjectsService {
   async fetchProjects(start: number, limit: number) {
     try {
-      const response = await fetch(`${API_URL}?start=${start}&limit=${limit}`);
-      if (!response.ok) throw new Error("Failed to load projects");
-      return await response.json();
+      const response = await axios.get(
+        `${API_URL}?start=${start}&limit=${limit}`
+      );
+      return await response.data;
     } catch (error) {
       console.error("Error fetching projects:", error);
       throw error;
-    }
-  }
-
-  async getAllUserProjects(): Promise<IProject[] | null> {
-    try {
-      const response = await axios.get(API_URL);
-      return response.data.projects;
-    } catch (error) {
-      console.log(error);
-      return null;
     }
   }
 
@@ -52,6 +44,19 @@ class ProjectsService {
   async getProject(id: string): Promise<IProject | null> {
     try {
       const response = await axios.get(`${API_URL}/${id}`);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  }
+
+  async changeTaskLocation(changeData: ChangeTaskLocationProps) {
+    try {
+      const response = await axios.post(
+        `${API_URL}/change-task-location`,
+        changeData
+      );
       return response.data;
     } catch (error) {
       console.log(error);
