@@ -2,7 +2,9 @@ import React, { createContext, useState, useEffect } from "react";
 import AuthService from "../services/AuthService";
 import { Credentials } from "@customTypes/credentials";
 import IPerson from "@interfaces/IPerson";
-import { useUser } from "@hooks/useUser";
+import { useUser } from "@features/user/hooks/useUser";
+import store from "../store";
+// import { setProjects } from "@features/projects/redux/projectsReducer";
 
 export interface AuthContextType {
   isAuthenticated: boolean;
@@ -21,6 +23,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     setLoading(true);
     AuthService.checkAuthStatus().then((user) => {
+      // store.dispatch(setProjects(user?.projects));
       setUser(user);
       setIsAuthenticated(!!user);
       setLoading(false);
