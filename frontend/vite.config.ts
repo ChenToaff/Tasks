@@ -10,6 +10,10 @@ export default defineConfig({
         target: "http://localhost:5000",
         rewrite: (path) => path.replace(/^\/api/, ""),
       },
+      "/socket.io": {
+        target: "http://localhost:5000",
+        ws: true,
+      },
     },
   },
   resolve: {
