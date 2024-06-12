@@ -1,12 +1,17 @@
-import { PayloadAction, SerializedError, createSlice } from "@reduxjs/toolkit";
-import { loadInitialProjects, loadMoreProjects } from "./projectActions";
+import { createSlice } from "@reduxjs/toolkit";
 import IProject from "@interfaces/IProject";
+import * as reducers from "./projectsReducers";
+import {
+  loadInitialProjects,
+  loadMoreProjects,
+  loadProjectDetails,
+} from "./projectsActions";
 
-interface ProjectsState {
+export interface ProjectsState {
   data: IProject[];
-  loading: Boolean;
-  error: SerializedError | undefined;
-  canLoadMore: Boolean;
+  loading: boolean;
+  error: string | undefined;
+  canLoadMore: boolean;
 }
 
 const initialState: ProjectsState = {
@@ -19,28 +24,16 @@ const initialState: ProjectsState = {
 const projectSlice = createSlice({
   name: "projects",
   initialState,
-  reducers: {
-    addProject: (state: ProjectsState, action: PayloadAction<IProject>) => {
-      state.data.unshift(action.payload);
-    },
-    updateProject: (state: ProjectsState, action: PayloadAction<IProject>) => {
-      const index = state.data.findIndex((p) => p.id === action.payload.id);
-      if (index !== -1) {
-        state.data[index] = action.payload;
-      }
-    },
-    removeProject: (state: ProjectsState, action: PayloadAction<string>) => {
-      state.data = state.data.filter((p) => p.id !== action.payload);
-    },
-  },
+  reducers: reducers,
   extraReducers: (builder) => {
     builder
       .addCase(loadInitialProjects.pending, (state) => {
         state.loading = true;
       })
       .addCase(loadInitialProjects.fulfilled, (state, action) => {
+        console.log({ action });
         state.data = action.payload;
-        state.canLoadMore = action.payload.length === 10;
+        state.canLoadMore = action.payload.length === 8;
         state.loading = false;
       })
       .addCase(loadInitialProjects.rejected, (state, action) => {
@@ -53,18 +46,34 @@ const projectSlice = createSlice({
       })
       .addCase(loadMoreProjects.fulfilled, (state, action) => {
         state.data = state.data.concat(action.payload);
-        state.canLoadMore = action.payload.length === 10;
+        state.canLoadMore = action.payload.length === 8;
         state.loading = false;
       })
       .addCase(loadMoreProjects.rejected, (state, action) => {
         state.error = action.error.message;
         state.canLoadMore = false;
         state.loading = false;
+      })
+      .addCase(loadProjectDetails.fulfilled, (state: ProjectsState, action) => {
+        // Insert or update the project in the projects array
+        const index = state.data.findIndex((p) => p.id === action.payload.id);
+        action.payload.loaded = true;
+        if (index !== -1) {
+          state.data[index] = action.payload;
+        } else {
+          state.data.push(action.payload);
+        }
       });
   },
 });
 
-export const { addProject, updateProject, removeProject } =
-  projectSlice.actions;
-
+export const {
+  addProject,
+  updateProject,
+  removeProject,
+  addTaskToProject,
+  updateTaskInProject,
+  removeTaskFromProject,
+  changeTaskLocation,
+} = projectSlice.actions;
 export default projectSlice.reducer;
