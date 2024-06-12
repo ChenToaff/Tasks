@@ -4,11 +4,20 @@ import SideMenu from "@components/SideMenu";
 import TopBar from "@components/TopBar";
 import TaskRightDrawer from "@features/tasks/components/TaskRightDrawer";
 import { SelectedTaskProvider } from "@features/tasks/contexts/SelectedTaskContext";
-import { Box, Container, CssBaseline } from "@mui/material";
-import { Suspense } from "react";
+import { TaskInEditProvider } from "@features/tasks/contexts/TaskInEditContext";
+import { Box, CssBaseline } from "@mui/material";
+import socketService from "@services/WebsocketService";
+import { Suspense, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 
 export default function MainLayout(): JSX.Element {
+  useEffect(() => {
+    socketService.connect("");
+
+    return () => {
+      socketService.disconnect();
+    };
+  });
   return (
     <>
       <CssBaseline />
@@ -16,11 +25,14 @@ export default function MainLayout(): JSX.Element {
         sx={{
           display: "flex",
           flexGrow: 1,
+          height: "100%",
           flexDirection: "column",
         }}
       >
         <TopBar />
-        <Box sx={{ display: "flex", flexGrow: 1, width: "100%" }}>
+        <Box
+          sx={{ display: "flex", height: "100%", flexGrow: 1, width: "100%" }}
+        >
           <SideMenu />
           <Box
             component="main"
@@ -33,21 +45,24 @@ export default function MainLayout(): JSX.Element {
             }}
           >
             <SelectedTaskProvider>
-              <DrawerHeader />
-              <Box
-                sx={{
-                  width: "100%",
-                  height: "100%",
-                  display: "flex",
-                  overflow: "auto",
-                  marginX: 3,
-                }}
-              >
-                <Suspense fallback={<Loading />}>
-                  <Outlet />
-                </Suspense>
-                <TaskRightDrawer />
-              </Box>
+              <TaskInEditProvider>
+                <DrawerHeader />
+                <Box
+                  minWidth="400px"
+                  sx={{
+                    width: "100%",
+                    height: "100%",
+                    display: "flex",
+                    overflow: "auto",
+                    paddingLeft: 3,
+                  }}
+                >
+                  <Suspense fallback={<Loading />}>
+                    <Outlet />
+                  </Suspense>
+                  <TaskRightDrawer />
+                </Box>
+              </TaskInEditProvider>
             </SelectedTaskProvider>
           </Box>
         </Box>
