@@ -16,14 +16,40 @@ export const createTaskColumn = async (
   return await newTask.save();
 };
 
-// export const updateTask = async (
-//   id: string,
-//   taskData: Partial<ITask>
-// ): Promise<ITask | null> => {
-//   return await TaskModel.findByIdAndUpdate(id, taskData, {
-//     new: true,
-//   }).populate("assignedTo");
-// };
+export const addTaskToTaskColumn = async (
+  taskColumnId: string,
+  taskId: Types.ObjectId,
+  position?: number
+) => {
+  // Default the position if it's out of range
+  if (!position || position < 0) {
+    position = 0;
+  }
+
+  await TaskColumnModel.findByIdAndUpdate(
+    taskColumnId,
+    {
+      $push: {
+        tasks: {
+          $each: [taskId],
+          $position: position,
+        },
+      },
+    },
+    { new: true, useFindAndModify: false }
+  );
+};
+
+export const removeTaskfromTaskColumn = async (
+  taskColumnId: string,
+  taskId: Types.ObjectId
+) => {
+  await TaskColumnModel.findByIdAndUpdate(
+    taskColumnId,
+    { $pull: { tasks: taskId } },
+    { new: true, useFindAndModify: false }
+  );
+};
 
 export const deleteTaskColumn = async (
   id: string
