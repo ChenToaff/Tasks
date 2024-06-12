@@ -74,9 +74,9 @@ export const removeTeamMember = async (
   memberId: string
 ): Promise<IProject> => {
   const project = await findProjectById(projectId);
-    project.members = project.members.filter(
-      (member) => member.toString() !== memberId
-    );
+  project.members = project.members.filter(
+    (member) => member.toString() !== memberId
+  );
   await project.save();
   return project;
 };
