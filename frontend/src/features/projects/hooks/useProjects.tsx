@@ -1,7 +1,10 @@
 // useProjects.js
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { loadInitialProjects, loadMoreProjects } from "../redux/projectActions";
+import {
+  loadInitialProjects,
+  loadMoreProjects,
+} from "../redux/projectsActions";
 import { RootState, AppDispatch } from "../../../store";
 
 export function useProjects() {

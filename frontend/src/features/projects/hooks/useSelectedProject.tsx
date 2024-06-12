@@ -1,12 +1,28 @@
-import { useContext } from "react";
-import {
-  SelectedProjectContext,
-  SelectedProjectContextType,
-} from "@features/projects/contexts/SelectedProjectContext";
+import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { AppDispatch, RootState } from "../../../store";
+import { selectProjectById } from "@features/projects/redux/projectSelectors";
+import { loadProjectDetails } from "../redux/projectsActions";
 
-// Update the useAuth hook to throw an error if the context is null.
-export const useSelectedProject = (): SelectedProjectContextType => {
-  const context = useContext(SelectedProjectContext)!;
+// Custom hook to use a selected project and ensure its full data is loaded
+const useSelectedProject = (projectId: string) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const project = useSelector((state: RootState) =>
+    selectProjectById(state, projectId)
+  );
 
-  return context;
+  useEffect(() => {
+    if (!project || (project && !project.loaded)) {
+      dispatch(loadProjectDetails(projectId));
+    }
+  }, [dispatch, projectId, project]);
+
+  const isLoading = !(project && project.loaded);
+
+  return {
+    project,
+    isLoading,
+  };
 };
+
+export default useSelectedProject;
