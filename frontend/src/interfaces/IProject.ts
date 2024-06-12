@@ -7,4 +7,5 @@ export default interface IProject {
   description: string;
   taskColumns: ITaskColumn[];
   members: string[];
+  loaded: Boolean;
 }
