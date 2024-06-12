@@ -78,12 +78,12 @@ export const updateProject = asyncHandler(
     const { id } = req.params;
     const { name, description, members } = req.body;
 
-      const project = await ProjectsService.updateProject(id, {
-        name,
-        description,
-        members,
-      });
-      res.json(project);
+    const project = await ProjectsService.updateProject(id, {
+      name,
+      description,
+      members,
+    });
+    res.json(project);
   }
 );
 

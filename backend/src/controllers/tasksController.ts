@@ -118,8 +118,8 @@ export const deleteTask = asyncHandler(async (req: Request, res: Response) => {
     const project = await ProjectsService.findProjectById(
       deletedTask.projectId
     );
-      (project.members as IPerson[]).forEach((member) => {
-        emitToUser(member.id.toString(), "task_deleted", {
+    (project.members as IPerson[]).forEach((member) => {
+      emitToUser(member.id.toString(), "task_deleted", {
         message: `Task deleted: ${deletedTask.id}`,
         task: deletedTask,
       });
