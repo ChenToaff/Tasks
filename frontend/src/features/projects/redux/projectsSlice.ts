@@ -31,7 +31,6 @@ const projectSlice = createSlice({
         state.loading = true;
       })
       .addCase(loadInitialProjects.fulfilled, (state, action) => {
-        console.log({ action });
         state.data = action.payload;
         state.canLoadMore = action.payload.length === 8;
         state.loading = false;
