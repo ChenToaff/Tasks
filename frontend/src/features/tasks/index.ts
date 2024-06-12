@@ -1,3 +1,3 @@
-import TasksCard from "./components/Card";
+import TasksCard from "./components/TasksCard";
 
 export { TasksCard };
