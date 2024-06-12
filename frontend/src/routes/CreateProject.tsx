@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import FolderIcon from "@mui/icons-material/ArrowBack";
-import NewProjectForm from "@features/projects/components/NewProjectForm";
+import CreateProjectForm from "@features/projects/components/CreateProjectForm";
 
 export default function CreateProject(): JSX.Element {
   const navigate = useNavigate();
@@ -28,7 +28,7 @@ export default function CreateProject(): JSX.Element {
         <Container maxWidth="md" sx={{ marginTop: 8, textAlign: "center" }}>
           <Typography variant="h3">Create a new project</Typography>
           <CssBaseline />
-          <NewProjectForm />
+          <CreateProjectForm />
         </Container>
       </Box>
     </>
