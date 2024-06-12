@@ -1,5 +1,5 @@
 import { Socket } from "socket.io";
-import newTask from "./newTask";
+// import newTask from "./newTask";
 import { addSocket, removeSocket } from "../socketManager";
 
 export default function onConnection(socket: Socket) {
@@ -17,5 +17,5 @@ export default function onConnection(socket: Socket) {
     removeSocket(userId, socket);
     console.log("User disconnected:", socket.id);
   });
-  socket.on("new-task", newTask);
+  // socket.on("new-task", newTask);
 }
