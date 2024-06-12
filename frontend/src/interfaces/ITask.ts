@@ -7,5 +7,4 @@ export default interface ITask {
   dueDate: string;
   projectId: string;
   taskColumnId: string;
-  editMode: Boolean;
 }
