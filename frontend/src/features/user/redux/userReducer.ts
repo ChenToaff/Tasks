@@ -42,7 +42,7 @@ const userSlice = createSlice({
         state.tasks.loading = false;
         state.tasks.error = action.error.message;
       });
-    // people
+    // users
     builder
       .addCase(fetchMoreColleagues.pending, (state) => {
         state.colleagues.loading = true;

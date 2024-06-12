@@ -3,16 +3,16 @@ import asyncHandler from "../utils/asyncHandler";
 import * as TasksService from "../services/tasksService";
 import * as ProjectsService from "../services/projectsService";
 import * as TaskColumnService from "../services/taskColumnService";
-import * as PeopleService from "../services/peopleService";
+import * as UsersService from "../services/usersService";
 import { ApiError } from "../utils/ApiError";
 import ITask from "../interfaces/ITask";
 import { getIO } from "../websocket";
 import { emitToUser } from "../websocket/socketManager";
-import IPerson from "../interfaces/IPerson";
+import IUser from "../interfaces/IUser";
 
 export const getAllTasks = asyncHandler(async (req: Request, res: Response) => {
   const userId = req.user!.id;
-  const projects = await PeopleService.getTasks(userId);
+  const projects = await UsersService.getTasks(userId);
   res.json(projects);
 });
 
@@ -36,7 +36,7 @@ export const createTask = asyncHandler(async (req: Request, res: Response) => {
   let project = null;
   let taskColumn = null;
   if (assignedTo) {
-    assignee = await PeopleService.findPersonById(assignedTo);
+    assignee = await UsersService.findUserById(assignedTo);
   }
   if (projectId) {
     project = await ProjectsService.findProjectById(projectId);
@@ -51,14 +51,14 @@ export const createTask = asyncHandler(async (req: Request, res: Response) => {
   } as ITask);
 
   if (assignee) {
-    PeopleService.addTask(assignedTo, newTask.id);
+    UsersService.addTask(assignedTo, newTask.id);
   }
 
   if (project) {
     if (taskColumn) {
       await TaskColumnService.addTaskToTaskColumn(taskColumnId, newTask._id);
     }
-    (project.members as IPerson[]).forEach((member) => {
+    (project.members as IUser[]).forEach((member) => {
       emitToUser(member.id.toString(), "task_created", {
         message: `Task created: ${newTask.id}`,
         task: newTask,
@@ -75,7 +75,7 @@ export const updateTask = asyncHandler(async (req: Request, res: Response) => {
   const { title, description, completed, assignedTo, dueDate, projectId } =
     req.body;
   if (assignedTo) {
-    await PeopleService.addTask(assignedTo, id);
+    await UsersService.addTask(assignedTo, id);
   }
 
   try {
@@ -91,7 +91,7 @@ export const updateTask = asyncHandler(async (req: Request, res: Response) => {
       const project = await ProjectsService.findProjectById(
         updatedTask.projectId
       );
-      (project.members as IPerson[]).forEach((member) => {
+      (project.members as IUser[]).forEach((member) => {
         emitToUser(member.id.toString(), "task_updated", {
           message: `Task updated: ${updatedTask.id}`,
           task: updatedTask,
@@ -118,7 +118,7 @@ export const deleteTask = asyncHandler(async (req: Request, res: Response) => {
     const project = await ProjectsService.findProjectById(
       deletedTask.projectId
     );
-    (project.members as IPerson[]).forEach((member) => {
+    (project.members as IUser[]).forEach((member) => {
       emitToUser(member.id.toString(), "task_deleted", {
         message: `Task deleted: ${deletedTask.id}`,
         task: deletedTask,

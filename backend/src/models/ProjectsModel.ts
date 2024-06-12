@@ -5,7 +5,7 @@ const ProjectSchema: Schema = new Schema(
   {
     name: { type: String, required: true },
     description: { type: String },
-    members: [{ type: Schema.Types.ObjectId, ref: "Person" }],
+    members: [{ type: Schema.Types.ObjectId, ref: "User" }],
     taskColumns: [{ type: Schema.Types.ObjectId, ref: "TaskColumn" }],
   },
   { optimisticConcurrency: true }

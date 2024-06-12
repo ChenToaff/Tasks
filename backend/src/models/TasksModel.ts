@@ -4,7 +4,7 @@ export const TaskSchema: Schema = new Schema({
   title: { type: String },
   description: { type: String },
   completed: { type: Boolean, default: false },
-  assignedTo: { type: Schema.Types.ObjectId, ref: "Person" },
+  assignedTo: { type: Schema.Types.ObjectId, ref: "User" },
   dueDate: { type: Date },
   projectId: { type: Schema.Types.ObjectId, ref: "Project" },
   taskColumnId: { type: Schema.Types.ObjectId, ref: "TaskColumn" },

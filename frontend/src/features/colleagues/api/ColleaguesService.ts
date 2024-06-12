@@ -1,4 +1,4 @@
-import IPerson from "@interfaces/IPerson";
+import IUser from "@interfaces/IUser";
 import axios from "axios";
 
 const API_URL = "/api/colleagues";
@@ -14,9 +14,7 @@ class ColleaguesService {
       throw error;
     }
   }
-  async addColleague(
-    newProjectData: Partial<IPerson>
-  ): Promise<IPerson | null> {
+  async addColleague(newProjectData: Partial<IUser>): Promise<IUser | null> {
     try {
       const response = await axios.post(API_URL, newProjectData);
       return response.data;
@@ -38,7 +36,7 @@ class ColleaguesService {
     }
   }
 
-  async getColleague(id: string): Promise<IPerson | null> {
+  async getColleague(id: string): Promise<IUser | null> {
     try {
       const response = await axios.get(`${API_URL}/${id}`);
       return response.data;

@@ -1,10 +1,10 @@
 import { Schema, Document, Types } from "mongoose";
 import ITaskColumn from "./ITaskColumn";
-import IPerson from "./IPerson";
+import IUser from "./IUser";
 
 export default interface IProject extends Document {
   name: string;
   description: string;
   taskColumns: Types.DocumentArray<ITaskColumn>;
-  members: (IPerson | Schema.Types.ObjectId)[];
+  members: (IUser | Schema.Types.ObjectId)[];
 }

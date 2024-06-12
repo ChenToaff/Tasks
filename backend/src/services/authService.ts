@@ -1,13 +1,13 @@
 import bcrypt from "bcryptjs";
-import * as PeopleService from "../services/peopleService";
-import IPerson from "../interfaces/IPerson";
+import * as UsersService from "../services/usersService";
+import IUser from "../interfaces/IUser";
 
 export const authenticateUser = async (
   username: string,
   password: string
-): Promise<IPerson | null> => {
+): Promise<IUser | null> => {
   try {
-    const user = await PeopleService.findPersonByUsername(username);
+    const user = await UsersService.findUserByUsername(username);
     if (user && bcrypt.compareSync(password, user.passwordHash)) {
       return user;
     }

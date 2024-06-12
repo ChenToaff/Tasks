@@ -1,8 +1,8 @@
 import { useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../../../store";
-import IPerson from "@interfaces/IPerson";
+import IUser from "@interfaces/IUser";
 
-const useColleagueById = (id?: string): IPerson | null => {
+const useColleagueById = (id?: string): IUser | null => {
   return useSelector((state: RootState) =>
     id ? state.colleagues.data[id] : null
   );

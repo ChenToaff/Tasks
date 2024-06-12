@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect } from "react";
 import AuthService from "../services/AuthService";
 import { Credentials } from "@customTypes/credentials";
-import IPerson from "@interfaces/IPerson";
+import IUser from "@interfaces/IUser";
 import { useUser } from "@features/user/hooks/useUser";
 import store from "../store";
 // import { setProjects } from "@features/projects/redux/projectsReducer";

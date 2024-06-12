@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import passport from "passport";
-import IPerson from "../interfaces/IPerson";
+import IUser from "../interfaces/IUser";
 
 export const login = (req: Request, res: Response, next: NextFunction) => {
   passport.authenticate(
     "local",
-    async (err: any, user: IPerson, info: { message: string }) => {
+    async (err: any, user: IUser, info: { message: string }) => {
       if (err) return next(err);
       if (!user) return res.status(400).json({ message: info.message });
 
@@ -37,7 +37,7 @@ export const logout = (req: Request, res: Response) => {
 
 export const checkStatus = (req: Request, res: Response) => {
   if (req.isAuthenticated()) {
-    const user = req.user as IPerson;
+    const user = req.user as IUser;
     res.json({
       message: "User is logged in",
       user: {

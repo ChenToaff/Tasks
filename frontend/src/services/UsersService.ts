@@ -1,10 +1,10 @@
 import axios from "axios";
-import IPerson from "@interfaces/IPerson";
+import IUser from "@interfaces/IUser";
 
-const API_URL = "/api/people";
+const API_URL = "/api/users";
 
-class PeopleService {
-  async getAllPeople(): Promise<[IPerson] | null> {
+class UsersService {
+  async getAllUsers(): Promise<[IUser] | null> {
     try {
       const response = await axios.get(`${API_URL}/`);
       return response.data;
@@ -15,4 +15,4 @@ class PeopleService {
   }
 }
 
-export default new PeopleService();
+export default new UsersService();

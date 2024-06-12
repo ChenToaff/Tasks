@@ -6,7 +6,7 @@ import colleaguesReducer from "@features/colleagues/redux/colleaguesSlice.ts";
 const store = configureStore({
   reducer: {
     projects: projectsReducer,
-    // people: peopleReducer,
+    // users: usersReducer,
     tasks: tasksReducer,
     colleagues: colleaguesReducer,
   },

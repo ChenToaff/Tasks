@@ -6,12 +6,12 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Chip from "@mui/material/Chip";
-import IPerson from "@interfaces/IPerson";
+import IUser from "@interfaces/IUser";
 import { useColleagues } from "../hooks/useColleagues";
 
 interface ColleaguesSelectProps {
   selected: string[];
-  selectFrom: IPerson[];
+  selectFrom: IUser[];
   setSelected: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
@@ -45,9 +45,9 @@ export default function ColleaguesSelect({
             </Box>
           )}
         >
-          {Object.values(colleagues).map((person) => (
-            <MenuItem key={person.username} value={person.username}>
-              {person.username}
+          {Object.values(colleagues).map((user) => (
+            <MenuItem key={user.username} value={user.username}>
+              {user.username}
             </MenuItem>
           ))}
         </Select>

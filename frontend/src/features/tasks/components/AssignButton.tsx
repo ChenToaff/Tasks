@@ -11,7 +11,7 @@ import {
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import { useRef, useState } from "react";
 import { useColleagues } from "@features/colleagues/hooks/useColleagues";
-import IPerson from "@interfaces/IPerson";
+import IUser from "@interfaces/IUser";
 import ITask from "@interfaces/ITask";
 import TasksService from "../api/TasksService";
 import Avatar from "@mui/material/Avatar";
@@ -28,7 +28,7 @@ export default function AssignButton({ task }: { task: ITask }) {
   ];
   const colleague = useColleagueById(task.assignedTo);
   const assignee = task.assignedTo == user?.id ? user : colleague;
-  const [selectedUser, setSelectedUser] = useState<Partial<IPerson> | null>(
+  const [selectedUser, setSelectedUser] = useState<Partial<IUser> | null>(
     assignee
   );
 
@@ -36,7 +36,7 @@ export default function AssignButton({ task }: { task: ITask }) {
   const buttonRef = useRef(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const filterOptions = createFilterOptions({
-    stringify: ({ name, username, id }: Partial<IPerson>) =>
+    stringify: ({ name, username, id }: Partial<IUser>) =>
       `${name} ${username} ${id}`,
   });
 
@@ -92,7 +92,7 @@ export default function AssignButton({ task }: { task: ITask }) {
               return `${username}`;
             }}
             filterSelectedOptions
-            renderOption={(props, option: Partial<IPerson>) => {
+            renderOption={(props, option: Partial<IUser>) => {
               return (
                 <li {...props}>
                   {option.name}&nbsp;&nbsp;&nbsp;@{option.username}

@@ -1,40 +1,40 @@
-import IPerson from "../interfaces/IPerson";
-import PersonModel from "../models/PeopleModel";
+import IUser from "../interfaces/IUser";
+import UserModel from "../models/UsersModel";
 import { NotFoundError } from "../utils/ApiError";
 
 export const getColleagues = async (
   userId: string
-): Promise<Partial<IPerson>[]> => {
-  const user = await PersonModel.findById<IPerson>(userId, "people")
+): Promise<Partial<IUser>[]> => {
+  const user = await UserModel.findById<IUser>(userId, "users")
     .populate({
       path: "colleagues",
       select: "username name",
     })
     .exec();
-  if (!user) throw new NotFoundError("Person not found");
+  if (!user) throw new NotFoundError("User not found");
 
-  const colleagues = user.colleagues as IPerson[];
+  const colleagues = user.colleagues as IUser[];
   return colleagues;
 };
 
 export const addColleague = async (
   id: string,
   colleagueId: string
-): Promise<IPerson> => {
-  const updatedPerson = await PersonModel.findByIdAndUpdate<IPerson>(
+): Promise<IUser> => {
+  const updatedUser = await UserModel.findByIdAndUpdate<IUser>(
     id,
     {
       $push: { colleagues: colleagueId },
     },
     { new: true }
   );
-  if (!updatedPerson) throw new NotFoundError("Person not found");
-  return updatedPerson;
+  if (!updatedUser) throw new NotFoundError("User not found");
+  return updatedUser;
 };
 
-// export const removeColleague = async (id: string): Promise<IPerson | null> => {
-//   const deletedPerson = await PersonModel.findByIdAndDelete(id).select(
+// export const removeColleague = async (id: string): Promise<IUser | null> => {
+//   const deletedUser = await UserModel.findByIdAndDelete(id).select(
 //     "-_id -__v"
 //   );
-//   return deletedPerson;
+//   return deletedUser;
 // };

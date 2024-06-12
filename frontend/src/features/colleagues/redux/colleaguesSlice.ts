@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { loadInitialColleagues } from "./colleagueActions";
-import IPerson from "@interfaces/IPerson";
+import IUser from "@interfaces/IUser";
 import * as colleagueReducers from "./colleaguesReducers";
 
 export interface ColleaguesState {
-  data: { [id: string]: IPerson };
+  data: { [id: string]: IUser };
   loading: Boolean;
   error: string | undefined;
 }
@@ -26,7 +26,7 @@ const colleagueSlice = createSlice({
       })
       .addCase(loadInitialColleagues.fulfilled, (state, action) => {
         state.data = action.payload.reduce(
-          (acc: { [id: string]: IPerson }, colleague: IPerson) => {
+          (acc: { [id: string]: IUser }, colleague: IUser) => {
             acc[colleague.id] = colleague;
             return acc;
           },

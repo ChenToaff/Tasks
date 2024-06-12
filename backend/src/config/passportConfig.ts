@@ -1,13 +1,13 @@
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import * as authService from "../services/authService";
-import * as peopleService from "../services/peopleService";
-import IPerson from "../interfaces/IPerson";
+import * as usersService from "../services/usersService";
+import IUser from "../interfaces/IUser";
 
-// for req.user to use the IPerson
+// for req.user to use the IUser
 declare global {
   namespace Express {
-    interface User extends IPerson {}
+    interface User extends IUser {}
   }
 }
 
@@ -25,13 +25,13 @@ passport.use(
   })
 );
 
-passport.serializeUser((user: IPerson, done) => {
+passport.serializeUser((user: IUser, done) => {
   done(null, user.id);
 });
 
 passport.deserializeUser(async (id: string, done) => {
   try {
-    const user = await peopleService.findPersonById(id);
+    const user = await usersService.findUserById(id);
     if (user) {
       done(null, user);
     } else {

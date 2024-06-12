@@ -1,5 +1,5 @@
-import IPerson from "../interfaces/IPerson";
-import PersonModel from "../models/PeopleModel";
+import IUser from "../interfaces/IUser";
+import UserModel from "../models/UsersModel";
 import bcrypt from "bcryptjs";
 import { validatePassword } from "../utils/validations";
 import { Schema } from "mongoose";
@@ -7,31 +7,31 @@ import IProject from "../interfaces/IProject";
 import { NotFoundError, ValidationError } from "../utils/ApiError";
 import ITask from "../interfaces/ITask";
 
-interface CreatePersonData {
+interface CreateUserData {
   name: string;
   username: string;
   password: string;
 }
 
-interface UpdatePersonData {
+interface UpdateUserData {
   name?: string;
   username?: string;
   password?: string;
 }
 
-export const findPersonById = async (id: string): Promise<IPerson> => {
-  const person = await PersonModel.findById(id);
-  if (!person) throw new NotFoundError("Person not found");
-  return person;
+export const findUserById = async (id: string): Promise<IUser> => {
+  const user = await UserModel.findById(id);
+  if (!user) throw new NotFoundError("User not found");
+  return user;
 };
 
 // Resolve usernames to _ids
 export const getUserIds = async (
   usernames: string[]
 ): Promise<Schema.Types.ObjectId[]> => {
-  const users = await PersonModel.find({
+  const users = await UserModel.find({
     username: { $in: usernames },
-  }).select<IPerson>("_id");
+  }).select<IUser>("_id");
   return users.map<Schema.Types.ObjectId>((user) => user._id);
 };
 
@@ -40,7 +40,7 @@ export const getProjects = async (
   start: number,
   limit: number
 ): Promise<IProject[]> => {
-  const user = await PersonModel.findById(userId)
+  const user = await UserModel.findById(userId)
     .select("projects")
     .populate({ path: "projects", select: "name description" });
 
@@ -53,7 +53,7 @@ export const getProjects = async (
 };
 
 export const getTasks = async (userId: string): Promise<ITask[]> => {
-  const user = await PersonModel.findById<IPerson>(userId, "people")
+  const user = await UserModel.findById<IUser>(userId, "users")
     .populate({
       path: "tasks",
     })
@@ -68,8 +68,8 @@ export const getTasks = async (userId: string): Promise<ITask[]> => {
 
 export const getColleagues = async (
   userId: string
-): Promise<Partial<IPerson>[] | null> => {
-  const user = await PersonModel.findById<IPerson>(userId, "people")
+): Promise<Partial<IUser>[] | null> => {
+  const user = await UserModel.findById<IUser>(userId, "users")
     .populate({
       path: "colleagues",
       select: "username name",
@@ -79,47 +79,45 @@ export const getColleagues = async (
     throw new NotFoundError("User not found");
   }
 
-  const colleagues = user.colleagues as IPerson[];
+  const colleagues = user.colleagues as IUser[];
   return colleagues;
 };
 
-export const findAllPeople = async (): Promise<IPerson[]> => {
-  return await PersonModel.find().select("username name id");
+export const findAllUsers = async (): Promise<IUser[]> => {
+  return await UserModel.find().select("username name id");
 };
 
 export const addProject = async (
   id: Schema.Types.ObjectId,
   projectId: string
-): Promise<IPerson> => {
-  const updatedPerson = await PersonModel.findByIdAndUpdate<IPerson>(
+): Promise<IUser> => {
+  const updatedUser = await UserModel.findByIdAndUpdate<IUser>(
     id,
     {
       $push: { projects: { $each: [projectId], $position: 0 } },
     },
     { new: true }
   );
-  if (!updatedPerson) throw new NotFoundError("Person not found");
-  return updatedPerson;
+  if (!updatedUser) throw new NotFoundError("User not found");
+  return updatedUser;
 };
 
 export const addTask = async (id: Schema.Types.ObjectId, taskId: string) => {
-  const updatedPerson = await PersonModel.findByIdAndUpdate<IPerson>(
+  const updatedUser = await UserModel.findByIdAndUpdate<IUser>(
     id,
     { $push: { tasks: { $each: [taskId], $position: 0 } } },
     { new: true }
   );
-  if (!updatedPerson) throw new NotFoundError("Person not found");
+  if (!updatedUser) throw new NotFoundError("User not found");
 };
 
-export const findPersonByUsername = async (
+export const findUserByUsername = async (
   username: string
-): Promise<IPerson | null> => {
-  return await PersonModel.findOne({ username });
+): Promise<IUser | null> => {
+  return await UserModel.findOne({ username });
 };
 
-export const createPerson = async (
-  data: CreatePersonData
-): Promise<IPerson> => {
+export const createUser = async (data: CreateUserData): Promise<IUser> => {
   if (!validatePassword(data.password)) {
     throw new ValidationError(
       "Password must be at least 8 characters long, include at least one uppercase letter, and one number."
@@ -127,20 +125,20 @@ export const createPerson = async (
   }
 
   const passwordHash = await bcrypt.hash(data.password, 10);
-  const person = new PersonModel({
+  const user = new UserModel({
     name: data.name,
     username: data.username,
     passwordHash,
   });
-  const savedPerson = await person.save();
-  const { name, username, id } = savedPerson.toObject();
-  return { name, username, id } as IPerson;
+  const savedUser = await user.save();
+  const { name, username, id } = savedUser.toObject();
+  return { name, username, id } as IUser;
 };
 
-export const updatePerson = async (
+export const updateUser = async (
   id: string,
-  data: UpdatePersonData
-): Promise<IPerson> => {
+  data: UpdateUserData
+): Promise<IUser> => {
   if (data.password) {
     if (!validatePassword(data.password)) {
       throw new ValidationError(
@@ -155,16 +153,16 @@ export const updatePerson = async (
     passwordHash: data.password,
   };
 
-  const updatedPerson = await PersonModel.findByIdAndUpdate(id, updateData, {
+  const updatedUser = await UserModel.findByIdAndUpdate(id, updateData, {
     new: true,
     select: "name username id",
   }).exec();
-  if (!updatedPerson) throw new NotFoundError("Person not found");
+  if (!updatedUser) throw new NotFoundError("User not found");
 
-  return updatedPerson;
+  return updatedUser;
 };
 
-export const deletePerson = async (id: string) => {
-  const deletedPerson = await PersonModel.findByIdAndDelete(id);
-  if (!deletedPerson) throw new NotFoundError("Person not found");
+export const deleteUser = async (id: string) => {
+  const deletedUser = await UserModel.findByIdAndDelete(id);
+  if (!deletedUser) throw new NotFoundError("User not found");
 };

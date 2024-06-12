@@ -4,10 +4,10 @@ import Avatar from "@mui/material/Avatar";
 import { Card, CardActionArea, CardContent, Typography } from "@mui/material";
 
 export default function TasksCard() {
-  const [people, setPeople] = useState<string[]>([]);
+  const [users, setUsers] = useState<string[]>([]);
 
   useEffect(() => {
-    setPeople(["Chen", "Omri Kuperberg"]);
+    setUsers(["Chen", "Omri Kuperberg"]);
   }, []);
 
   return (
