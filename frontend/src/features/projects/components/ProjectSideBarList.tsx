@@ -9,14 +9,12 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
-
-import { useSelector } from "react-redux";
-import { RootState } from "../../../store";
+import { useProjects } from "../hooks/useProjects";
 
 export default function ProjectSideBarList({ open }: { open: boolean }) {
   if (!open) return <></>;
   const [collapsed, setCollapsed] = useState(true);
-  const projects = useSelector((state: RootState) => state.projects.data);
+  const { projects, loadMore, canLoadMore, loading } = useProjects();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -50,9 +48,14 @@ export default function ProjectSideBarList({ open }: { open: boolean }) {
               onClick={() => navigate(`/projects/${project.id}`)}
               selected={location.pathname === `/projects/${project.id}`}
             >
-              <ListItemText primary={project.name} />
+              <ListItemText sx={{ pl: 2 }} primary={project.name} />
             </ListItemButton>
           ))}
+          {canLoadMore && (
+            <ListItemButton onClick={loadMore}>
+              <ListItemText secondary={"Load More"} />
+            </ListItemButton>
+          )}
         </List>
       </Collapse>
     </List>
