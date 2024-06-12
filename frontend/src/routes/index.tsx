@@ -20,7 +20,7 @@ const Router: React.FC = (): ReactElement => {
           <Route element={<MainLayout />}>
             <Route path="tasks" element={<Tasks />} />
             <Route path="home" element={<Home />} />
-            <Route path="projects/:id" element={<Project />} />
+            <Route path="projects/:projectId" element={<Project />} />
           </Route>
         </Route>
 
