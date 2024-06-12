@@ -1,39 +1,41 @@
-import Loading from "@components/Loading";
-import Kanban from "@features/tasks/components/Kanban";
-import TaskBoard from "@features/tasks/components/TasksBoard";
-import IProject from "@interfaces/IProject";
-import Typography from "@mui/material/Typography";
-import ProjectsService from "@services/ProjectsService";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import Kanban from "@components/Kanban";
+import { Box } from "@mui/material";
+import { useNavigate, useParams } from "react-router-dom";
+import useSelectedProject from "@features/projects/hooks/useSelectedProject";
+import { useSelectedTask } from "@features/tasks/hooks/useSelectedTask";
 
 export default function Project() {
-  const { id } = useParams();
-  const [projectData, setItemData] = useState<IProject | null>(null);
-
-  useEffect(() => {
-    if (id) {
-      ProjectsService.getProject(id).then((data: IProject | null) => {
-        setItemData(data);
-      });
-    }
-  }, [id]);
-
-  if (!projectData) {
-    return <Loading />;
+  const { projectId } = useParams<{ projectId: string }>();
+  const navigate = useNavigate();
+  if (!projectId) {
+    navigate("/");
+    return null;
   }
+  const { setSelectedTask } = useSelectedTask();
+  const { project } = useSelectedProject(projectId);
+
+  if (!project) {
+    return <h1>Project not found!</h1>;
+  }
+
   return (
-    <>
-      <Typography>
-        <h1>{projectData?.name}</h1>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        flexGrow: 1,
+        flexShrink: 1,
+        overflow: "auto",
+      }}
+      onClick={() => setSelectedTask(null)}
+    >
+      <>
         <div>
-          <div>
-            <p>{projectData?.description}</p>
-          </div>
+          <h1>{project.name}</h1>
+          <p>{project.description}</p>
         </div>
-      </Typography>
-      {/* <TaskBoard /> */}
-      <Kanban projectData={projectData} />
-    </>
+        <Kanban projectId={projectId} />
+      </>
+    </Box>
   );
 }
