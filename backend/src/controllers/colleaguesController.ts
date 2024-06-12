@@ -1,15 +1,12 @@
 import { Request, Response } from "express";
 import asyncHandler from "../utils/asyncHandler";
-import { ApiError } from "../utils/ApiError";
 import * as ColleaguesService from "../services/colleaguesService";
 
 export const getColleagues = asyncHandler(
   async (req: Request, res: Response) => {
     const userId = req.user!._id;
     const people = await ColleaguesService.getColleagues(userId);
-    if (!people) {
-      throw new ApiError(404, "Person not found");
-    }
+
     res.json(people);
   }
 );

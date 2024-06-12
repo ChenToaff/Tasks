@@ -45,19 +45,19 @@ export const createPerson = asyncHandler(
 
 export const updatePerson = asyncHandler(
   async (req: Request, res: Response) => {
-    const { username } = req.params;
-    const updatedPerson = await PeopleService.updatePerson(username, req.body);
-    if (!updatedPerson) {
-      throw new ApiError(404, "Person not found");
-    }
+    const { id } = req.params;
+    const { username, password, name } = req.params;
+    const updatedPerson = await PeopleService.updatePerson(id, {
+      username,
+      password,
+      name,
+    });
+
     res.json(updatedPerson);
   }
 );
 
-export const deletePerson = asyncHandler(
-  async (req: Request, res: Response) => {
-    const { id } = req.params;
-    const deletedPerson = await PeopleService.deletePerson(id);
+    await PeopleService.deletePerson(id);
     if (!deletedPerson) {
       throw new ApiError(404, "Person not found");
     }

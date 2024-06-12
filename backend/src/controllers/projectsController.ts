@@ -10,10 +10,10 @@ import IPerson from "../interfaces/IPerson";
 
 export const addColumn = asyncHandler(async (req: Request, res: Response) => {
   const { projectId, title } = req.body;
-  const project = await ProjectsService.addColumn(projectId, title);
-  if (!project) {
-    throw new ApiError(400, "Project not found or member already added");
-  }
+
+  const taskColumn = await TaskColumnService.createTaskColumn({ title });
+  const project = await ProjectsService.addColumn(projectId, taskColumn.id);
+
   res.status(200).json(project);
 });
 
@@ -24,9 +24,6 @@ export const getAllProjects = asyncHandler(
     const limit = parseInt(req.query.limit as string, 10) || 10;
 
     const projects = await PeopleService.getProjects(userId, start, limit);
-    if (!projects) {
-      throw new ApiError(404, "Person not found");
-    }
     res.json(projects);
   }
 );
@@ -36,9 +33,6 @@ export const getProjectById = asyncHandler(
   async (req: Request, res: Response) => {
     const { id } = req.params;
     const project = await ProjectsService.findProjectById(id);
-    if (!project) {
-      return res.status(404).send("Project not found");
-    }
     res.json(project);
   }
 );
@@ -47,7 +41,7 @@ export const getProjectById = asyncHandler(
 export const createProject = asyncHandler(
   async (req: Request, res: Response) => {
     const { name, description, members } = req.body;
-    // Resolve usernames to _ids for manager
+    // Resolve usernames to ids
     const membersIds = await PeopleService.getUserIds(members);
     membersIds.push(req.user!._id);
     try {
@@ -84,20 +78,12 @@ export const updateProject = asyncHandler(
     const { id } = req.params;
     const { name, description, members } = req.body;
 
-    try {
       const project = await ProjectsService.updateProject(id, {
         name,
         description,
         members,
       });
-
-      if (!project) {
-        throw new ApiError(404, "Project not found");
-      }
       res.json(project);
-    } catch (error) {
-      throw new ApiError(400, "Bad Request");
-    }
   }
 );
 
@@ -105,11 +91,8 @@ export const updateProject = asyncHandler(
 export const addTeamMember = asyncHandler(
   async (req: Request, res: Response) => {
     const { projectId, personId } = req.body;
-    const project = await ProjectsService.findProjectById(projectId);
-    if (!project) {
-      throw new ApiError(400, "Project not found or member already added");
-    }
-    res.status(200).json(project);
+    await ProjectsService.addTeamMember(projectId, personId);
+    res.status(200).json({ message: "Team member added successfully" });
   }
 );
 
@@ -118,9 +101,6 @@ export const removeTeamMember = asyncHandler(
   async (req: Request, res: Response) => {
     const { projectId, personId } = req.body;
     const project = await ProjectsService.removeTeamMember(projectId, personId);
-    if (!project) {
-      throw new ApiError(404, "Project not found");
-    }
     res.status(200).json(project);
   }
 );
@@ -130,10 +110,7 @@ export const deleteProject = asyncHandler(
   async (req: Request, res: Response) => {
     const { id } = req.params;
     const project = await ProjectsService.deleteProject(id);
-    if (!project) {
-      throw new ApiError(404, "Project not found");
-    }
-    res.status(204).send();
+    res.status(204).json({ project });
   }
 );
 
@@ -143,17 +120,8 @@ export const changeTaskLocation = asyncHandler(
       req.body;
 
     const project = await ProjectsService.findProjectById(projectId);
-    if (!project) {
-      throw new ApiError(404, "Project not found");
-    }
-
-    await ProjectsService.changeTaskLocation(
-      projectId,
-      taskId,
-      sourceColumnId,
-      destColumnId,
-      position
-    );
+    await TaskColumnService.removeTaskfromTaskColumn(sourceColumnId, taskId);
+    await TaskColumnService.addTaskToTaskColumn(destColumnId, taskId, position);
 
     await TasksService.updateTask(taskId, { taskColumnId: destColumnId });
     (project.members as IPerson[]).forEach((member) => {

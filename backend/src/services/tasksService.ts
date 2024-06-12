@@ -1,12 +1,11 @@
 import ITask from "../interfaces/ITask";
 import TaskModel from "../models/TasksModel";
+import { NotFoundError } from "../utils/ApiError";
 
-export const findAllTasks = async (): Promise<ITask[]> => {
-  return await TaskModel.find().populate("assignedTo");
-};
-
-export const findTaskById = async (id: string): Promise<ITask | null> => {
-  return await TaskModel.findById(id).populate("assignedTo");
+export const findTaskById = async (id: string): Promise<ITask> => {
+  const task = await TaskModel.findById(id).populate("assignedTo");
+  if (!task) throw new NotFoundError("Task not found");
+  return task;
 };
 
 export const createTask = async (taskData: Partial<ITask>): Promise<ITask> => {
@@ -17,12 +16,17 @@ export const createTask = async (taskData: Partial<ITask>): Promise<ITask> => {
 export const updateTask = async (
   id: string,
   taskData: Partial<ITask>
-): Promise<ITask | null> => {
-  return await TaskModel.findByIdAndUpdate(id, taskData, {
+): Promise<ITask> => {
+  const updatedTask = await TaskModel.findByIdAndUpdate(id, taskData, {
     new: true,
-  }).populate("assignedTo");
+  });
+
+  if (!updatedTask) throw new NotFoundError("Task not found");
+  return updatedTask;
 };
 
-export const deleteTask = async (id: string): Promise<ITask | null> => {
-  return await TaskModel.findByIdAndDelete(id);
+export const deleteTask = async (id: string): Promise<ITask> => {
+  const deletedTask = await TaskModel.findByIdAndDelete(id);
+  if (!deletedTask) throw new NotFoundError("Task not found");
+  return deletedTask;
 };

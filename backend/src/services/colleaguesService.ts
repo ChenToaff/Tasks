@@ -1,19 +1,17 @@
 import IPerson from "../interfaces/IPerson";
 import PersonModel from "../models/PeopleModel";
-import bcrypt from "bcryptjs";
+import { NotFoundError } from "../utils/ApiError";
 
 export const getColleagues = async (
   userId: string
-): Promise<Partial<IPerson>[] | null> => {
+): Promise<Partial<IPerson>[]> => {
   const user = await PersonModel.findById<IPerson>(userId, "people")
     .populate({
       path: "colleagues",
       select: "username name",
     })
     .exec();
-  if (!user) {
-    throw new Error("User not found");
-  }
+  if (!user) throw new NotFoundError("Person not found");
 
   const colleagues = user.colleagues as IPerson[];
   return colleagues;
