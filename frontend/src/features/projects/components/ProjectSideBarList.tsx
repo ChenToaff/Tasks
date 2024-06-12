@@ -53,7 +53,7 @@ export default function ProjectSideBarList({ open }: { open: boolean }) {
           ))}
           {canLoadMore && (
             <ListItemButton onClick={loadMore}>
-              <ListItemText secondary={"Load More"} />
+              <ListItemText secondary={"Load more"} />
             </ListItemButton>
           )}
         </List>

@@ -86,8 +86,13 @@ export default function ProjectsCard() {
       )}
       {canLoadMore && (
         <CardActions>
-          <Button onClick={loadMore} variant="text">
-            Load More
+          <Button
+            onClick={loadMore}
+            sx={{ textTransform: "none" }}
+            color="secondary"
+            variant="text"
+          >
+            Load more
           </Button>
         </CardActions>
       )}
