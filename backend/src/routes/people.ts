@@ -4,11 +4,9 @@ import * as PeopleController from "../controllers/peopleController";
 const router = Router();
 
 router.get("/", PeopleController.getAllPeople);
-// router.get("/:id/projects", PeopleController.getPersonsProjects);
-router.get("/:id/colleagues", PeopleController.getPersonsColleagues);
-router.get("/:id/tasks", PeopleController.getPersonsTasks);
+router.get("/:id", PeopleController.getPerson);
 router.post("/", PeopleController.createPerson);
-router.put("/:username", PeopleController.updatePerson);
+router.patch("/:username", PeopleController.updatePerson);
 router.delete("/:username", PeopleController.deletePerson);
 
 export default router;
