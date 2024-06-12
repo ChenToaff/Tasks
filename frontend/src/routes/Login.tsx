@@ -12,7 +12,6 @@ export default function Login() {
   const [password, setPassword] = useState("");
 
   useEffect(() => {
-    console.log({ isAuthenticated });
     if (isAuthenticated) {
       navigate("/");
     }
