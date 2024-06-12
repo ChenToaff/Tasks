@@ -62,6 +62,7 @@ export default function ProjectsCard() {
           >
             {projects.map((project) => (
               <ListItemButton
+                key={project.id}
                 sx={{ flex: "0 0 50%" }}
                 onClick={() => navigate(`/projects/${project.id}`)}
               >
