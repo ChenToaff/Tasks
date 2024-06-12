@@ -8,6 +8,6 @@ export default interface IPerson extends Document {
   username: string;
   passwordHash: string;
   projects: IProject[] | Schema.Types.ObjectId[];
-  tasks: Schema.Types.ObjectId[];
+  tasks: ITask[] | Schema.Types.ObjectId[];
   colleagues: IPerson[] | Schema.Types.ObjectId[];
 }
