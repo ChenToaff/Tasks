@@ -34,7 +34,8 @@ export default function ColleaguesCard() {
                 {colleagues[id].name
                   .split(" ")
                   .map((n) => n[0])
-                  .join(" ")}
+                  .join(" ")
+                  .toLocaleUpperCase()}
               </Avatar>
             </IconButton>
           );

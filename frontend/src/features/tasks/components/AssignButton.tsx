@@ -56,7 +56,8 @@ export default function AssignButton({ task }: { task: ITask }) {
               {assignee.name
                 .split(" ")
                 .map((n) => n[0])
-                .join(" ")}
+                .join("")
+                .toLocaleUpperCase()}
             </Avatar>
           ) : (
             <PersonOutlineOutlinedIcon />
