@@ -8,7 +8,6 @@ export const authenticateUser = async (
 ): Promise<IPerson | null> => {
   try {
     const user = await PeopleService.findPersonByUsername(username);
-    console.log({ user }, username);
     if (user && bcrypt.compareSync(password, user.passwordHash)) {
       return user;
     }
