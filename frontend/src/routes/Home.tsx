@@ -1,16 +1,30 @@
 import { Box, Container, Typography } from "@mui/material";
-import { PeopleCard } from "@features/people";
+import { ColleaguesCard } from "@features/colleagues";
 import { ProjectsCard } from "@features/projects";
 import { TasksCard } from "@features/tasks";
-import { useUser } from "@hooks/useUser";
+import { useUser } from "@features/user/hooks/useUser";
+import { useSelectedTask } from "@features/tasks/hooks/useSelectedTask";
 
 export default function Home(): JSX.Element {
   const { user } = useUser();
+  const { setSelectedTask } = useSelectedTask();
+
+  function getTimeOfDay() {
+    const now = new Date();
+    const hours = now.getHours();
+
+    if (hours < 6) {
+      return "night";
+    } else if (6 <= hours && hours < 12) {
+      return "morning";
+    } else if (12 <= hours && hours < 18) {
+      return "afternoon";
+    } else {
+      return "evening";
+    }
+  }
   return (
-    <Container sx={{ py: 2 }}>
-      <Typography sx={{ mb: 2 }} variant="h5">
-        Home
-      </Typography>
+    <Container onClick={() => setSelectedTask(null)} sx={{ pt: 4 }}>
       <Typography variant="h6" align="center" paragraph>
         {new Date().toLocaleDateString("en-US", {
           weekday: "long",
@@ -19,7 +33,7 @@ export default function Home(): JSX.Element {
         })}
       </Typography>
       <Typography variant="h3" align="center" color="textPrimary" gutterBottom>
-        Good afternoon, {user?.name}
+        Good {getTimeOfDay()}, {user?.name}
       </Typography>
       <br />
 
@@ -32,7 +46,7 @@ export default function Home(): JSX.Element {
       >
         <TasksCard />
         <ProjectsCard />
-        <PeopleCard />
+        <ColleaguesCard />
       </Box>
     </Container>
   );
