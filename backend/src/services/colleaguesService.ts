@@ -17,25 +17,20 @@ export const getColleagues = async (
   return colleagues;
 };
 
-// export const addColleague = async (
-//   id: string,
-//   data: UpdatePersonData
-// ): Promise<IPerson | null> => {
-//   if (data.password) {
-//     data.password = await bcrypt.hash(data.password, 10);
-//   }
-//   const updateData = {
-//     ...data,
-//     passwordHash: data.password,
-//   };
-//   delete updateData.password; // Remove plaintext password if exists
-
-//   const updatedPerson = await PersonModel.findByIdAndUpdate(id, updateData, {
-//     new: true,
-//     select: "-_id -__v",
-//   }).exec();
-//   return updatedPerson;
-// };
+export const addColleague = async (
+  id: string,
+  colleagueId: string
+): Promise<IPerson> => {
+  const updatedPerson = await PersonModel.findByIdAndUpdate<IPerson>(
+    id,
+    {
+      $push: { colleagues: colleagueId },
+    },
+    { new: true }
+  );
+  if (!updatedPerson) throw new NotFoundError("Person not found");
+  return updatedPerson;
+};
 
 // export const removeColleague = async (id: string): Promise<IPerson | null> => {
 //   const deletedPerson = await PersonModel.findByIdAndDelete(id).select(
