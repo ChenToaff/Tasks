@@ -2,7 +2,7 @@ import DrawerHeader from "@components/DrawerHeader";
 import Loading from "@components/Loading";
 import SideMenu from "@components/SideMenu";
 import TopBar from "@components/TopBar";
-import TaskRightDrawer from "@features/tasks/components/TaskRightDrawer";
+import TaskDrawer from "@features/tasks/components/TaskDrawer";
 import { SelectedTaskProvider } from "@features/tasks/contexts/SelectedTaskContext";
 import { TaskInEditProvider } from "@features/tasks/contexts/TaskInEditContext";
 import { Box, CssBaseline } from "@mui/material";
@@ -60,7 +60,7 @@ export default function MainLayout(): JSX.Element {
                   <Suspense fallback={<Loading />}>
                     <Outlet />
                   </Suspense>
-                  <TaskRightDrawer />
+                  <TaskDrawer />
                 </Box>
               </TaskInEditProvider>
             </SelectedTaskProvider>
