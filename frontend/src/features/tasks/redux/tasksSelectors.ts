@@ -15,3 +15,12 @@ export const areTasksLoadedForProject = createSelector(
   selectTasksByProjectId,
   (tasks) => tasks.length > 0
 );
+
+// Selector to get tasks by assignee
+export const selectTasksByAssignee = createSelector(
+  [
+    (state: TasksState, assignee: string) => state.tasks,
+    (state, assignee) => assignee,
+  ],
+  (tasks, assignee) => tasks.filter((task) => task.assignedTo === assignee)
+);
