@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, TextField, Box, Typography } from "@mui/material";
-import AuthService from "@services/AuthService";
-import { useAuth } from "@hooks/useAuth";
+import AuthService from "@features/auth/api/AuthService";
+import { useAuth } from "@features/auth/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {

@@ -1,9 +1,8 @@
 import React, { createContext, useState, useEffect } from "react";
-import AuthService from "../services/AuthService";
+import AuthService from "../api/AuthService";
 import { Credentials } from "@customTypes/credentials";
 import IUser from "@interfaces/IUser";
-import { useUser } from "@features/user/hooks/useUser";
-import store from "../store";
+import store from "../../../store";
 // import { setProjects } from "@features/projects/redux/projectsReducer";
 
 export interface AuthContextType {
@@ -11,12 +10,14 @@ export interface AuthContextType {
   login: (credentials: Credentials) => Promise<void>;
   logout: () => Promise<void>;
   loading: boolean;
+  user: IUser | null;
+  setUser: React.Dispatch<React.SetStateAction<IUser | null>>;
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const { setUser } = useUser();
+  const [user, setUser] = useState<IUser | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -47,7 +48,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout, loading }}>
+    <AuthContext.Provider
+      value={{ isAuthenticated, login, logout, loading, user, setUser }}
+    >
       {children}
     </AuthContext.Provider>
   );

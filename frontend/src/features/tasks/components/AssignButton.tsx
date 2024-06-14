@@ -16,13 +16,13 @@ import ITask from "@interfaces/ITask";
 import TasksService from "../api/TasksService";
 import Avatar from "@mui/material/Avatar";
 import useColleagueById from "@features/colleagues/hooks/useColleagueById";
-import { useUser } from "@features/user/hooks/useUser";
+import { useAuth } from "@features/auth/hooks/useAuth";
 import useUpdateEffect from "@hooks/useUpdateEffect";
 import formatNameForAvatar from "@utils/formatNameForAvatar";
 
 export default function AssignButton({ task }: { task: ITask }) {
   const { colleagues } = useColleagues();
-  const { user } = useUser();
+  const { user } = useAuth();
   const options = [
     { name: "You", username: user?.username, id: user?.id },
     ...Object.values(colleagues),
