@@ -19,6 +19,7 @@
       "@hooks/*": ["./hooks/*"],
       "@customTypes/*": ["./types/*"],
       "@interfaces/*": ["./interfaces/*"],
+      "@utils/*": ["./utils/*"],
       "@/*": ["./src/*"]
     },
     /* Bundler mode */

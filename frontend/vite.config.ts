@@ -30,6 +30,7 @@ export default defineConfig({
       "@hooks": path.resolve(__dirname, "./src/hooks"),
       "@customTypes": path.resolve(__dirname, "./src/types"),
       "@interfaces": path.resolve(__dirname, "./src/interfaces"),
+      "@utils": path.resolve(__dirname, "./src/utils"),
     },
   },
 });
