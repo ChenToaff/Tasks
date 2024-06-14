@@ -3,12 +3,12 @@ import axios from "axios";
 const API_URL = "/api/tasks";
 
 class TasksService {
-  async getTasks(): Promise<ITask[]> {
+  async getTasks() {
     try {
       const response = await axios.get(API_URL);
       return response.data;
     } catch (error) {
-      console.error("Error fetching projects:", error);
+      console.error("Error fetching tasks:", error);
       throw error;
     }
   }
