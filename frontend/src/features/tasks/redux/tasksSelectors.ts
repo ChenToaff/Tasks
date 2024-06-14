@@ -1,13 +1,15 @@
 import { createSelector } from "@reduxjs/toolkit";
-import { TasksState } from "./tasksSlice";
+import { RootState } from "../../../store";
 
 // Selector to get tasks by project ID
 export const selectTasksByProjectId = createSelector(
   [
-    (state: TasksState, projectId: string) => state.tasks,
+    (state: RootState, projectId: string) => state.tasks.tasks,
     (state, projectId) => projectId,
   ],
-  (tasks, projectId) => tasks.filter((task) => task.projectId === projectId)
+  (tasks, projectId) => {
+    return Object.values(tasks).filter((task) => task.projectId === projectId);
+  }
 );
 
 // Selector to check if tasks for a project are already loaded
@@ -19,8 +21,10 @@ export const areTasksLoadedForProject = createSelector(
 // Selector to get tasks by assignee
 export const selectTasksByAssignee = createSelector(
   [
-    (state: TasksState, assignee: string) => state.tasks,
+    (state: RootState, assignee: string) => state.tasks.tasks,
     (state, assignee) => assignee,
   ],
-  (tasks, assignee) => tasks.filter((task) => task.assignedTo === assignee)
+  (tasks, assignee) => {
+    return Object.values(tasks).filter((task) => task.assignedTo === assignee);
+  }
 );

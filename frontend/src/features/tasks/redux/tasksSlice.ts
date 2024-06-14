@@ -3,14 +3,15 @@ import ITask from "@interfaces/ITask";
 import * as taskReducers from "./tasksReducers";
 import { loadProjectDetails } from "@features/projects/redux/projectsActions";
 import { loadInitialTasks } from "./tasksActions";
+
 export interface TasksState {
-  tasks: ITask[];
+  tasks: { [id: string]: ITask };
   loading: boolean;
   error: string | undefined;
 }
 
 const initialState: TasksState = {
-  tasks: [],
+  tasks: {},
   loading: false,
   error: undefined,
 };
@@ -18,14 +19,22 @@ const initialState: TasksState = {
 const tasksSlice = createSlice({
   name: "tasks",
   initialState,
-  reducers: taskReducers,
+  reducers: {
+    ...taskReducers,
+  },
   extraReducers: (builder) => {
     builder
       .addCase(loadInitialTasks.pending, (state) => {
         state.loading = true;
       })
       .addCase(loadInitialTasks.fulfilled, (state, action) => {
-        state.tasks = action.payload;
+        state.tasks = action.payload.reduce(
+          (acc: { [id: string]: ITask }, task: ITask) => {
+            acc[task.id] = task;
+            return acc;
+          },
+          {}
+        );
         state.loading = false;
       })
       .addCase(loadInitialTasks.rejected, (state, action) => {
@@ -33,18 +42,16 @@ const tasksSlice = createSlice({
         state.loading = false;
       })
       .addCase(loadProjectDetails.fulfilled, (state, action) => {
-        // Merge tasks from the project into the existing tasks, avoiding duplicates
         const newTasks = action.payload.taskColumns.flatMap((tc) => tc.tasks);
-        const existingIds = new Set(state.tasks.map((t) => t.id));
-        state.tasks = [
-          ...state.tasks,
-          ...newTasks.filter((t) => !existingIds.has(t.id)),
-        ];
+        newTasks.forEach((task) => {
+          if (!state.tasks[task.id]) {
+            state.tasks[task.id] = task;
+          }
+        });
       });
-    // Handle pending and rejected cases if necessary
   },
 });
 
-export const { setTasks, addTask, updateTask, removeTask, updateTaskColumn } =
+export const { addTask, updateTask, removeTask, updateTaskColumn } =
   tasksSlice.actions;
 export default tasksSlice.reducer;
