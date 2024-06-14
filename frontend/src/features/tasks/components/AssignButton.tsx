@@ -43,6 +43,9 @@ export default function AssignButton({ task }: { task: ITask }) {
   useUpdateEffect(() => {
     function assignToUser() {
       TasksService.assignTask(task.id, selectedUser?.id ?? null);
+      if (selectedUser) {
+        setOpen(false);
+      }
     }
     assignToUser();
   }, [selectedUser]);
