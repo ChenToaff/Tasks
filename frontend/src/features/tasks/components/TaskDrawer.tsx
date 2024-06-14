@@ -53,13 +53,13 @@ const Drawer = styled(MuiDrawer, {
 
 export default function TaskDrawer() {
   const boxRef = useRef<HTMLDivElement>(null);
-  const { selectedTask, setSelectedTask } = useSelectedTask();
+  const { selectedTask, setSelectedTaskId } = useSelectedTask();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (boxRef.current && !boxRef.current.contains(event.target as Node)) {
         setTimeout(() => {
-          setSelectedTask(null);
+          setSelectedTaskId(null);
         }, 300); // Delay closing to allow transition effect
       }
     };
@@ -84,7 +84,7 @@ export default function TaskDrawer() {
       anchor={"right"}
       hideBackdrop={true}
       open={!!selectedTask}
-      onClose={() => setSelectedTask(null)}
+      onClose={() => setSelectedTaskId(null)}
     >
       {!!selectedTask && (
         <>
@@ -100,7 +100,7 @@ export default function TaskDrawer() {
                 outline: 0,
               },
             }}
-            onClick={() => setSelectedTask(null)}
+            onClick={() => setSelectedTaskId(null)}
           >
             <CloseIcon />
           </IconButton>

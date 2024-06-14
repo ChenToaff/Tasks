@@ -5,7 +5,7 @@ import useSelectedProject from "@features/projects/hooks/useSelectedProject";
 import { useNavigate } from "react-router-dom";
 
 export default function TasksCardItem({ task }: { task: ITask }) {
-  const { setSelectedTask } = useSelectedTask();
+  const { setSelectedTaskId } = useSelectedTask();
   const { project } = useSelectedProject(task.projectId);
   const navigate = useNavigate();
   return (
@@ -14,7 +14,7 @@ export default function TasksCardItem({ task }: { task: ITask }) {
       divider
       disablePadding
       alignItems="flex-start"
-      onClick={() => setSelectedTask(task)}
+      onClick={() => setSelectedTaskId(task.id)}
     >
       <ListItemButton>
         <p>{task.title}</p>

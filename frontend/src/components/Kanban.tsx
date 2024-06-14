@@ -18,7 +18,7 @@ const Kanban = ({ projectId }: { projectId: string }) => {
   const [columns, setColumns] = useState<KanbanColumns>({});
 
   const { project, isLoading } = useSelectedProject(projectId);
-  const { setSelectedTask } = useSelectedTask();
+  const { setSelectedTaskId } = useSelectedTask();
   const { setTaskInEdit } = useTaskInEdit();
 
   useEffect(() => {
@@ -29,7 +29,7 @@ const Kanban = ({ projectId }: { projectId: string }) => {
     }
   }, [project, isLoading]);
   useEffect(() => {
-    setSelectedTask(null);
+    setSelectedTaskId(null);
   }, []);
 
   const onDragEnd = (result: any, columns: any, setColumns: any) => {

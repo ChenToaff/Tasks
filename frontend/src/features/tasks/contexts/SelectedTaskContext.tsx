@@ -1,9 +1,12 @@
 import React, { createContext, useMemo, useState } from "react";
+import { useSelector } from "react-redux";
 import ITask from "@interfaces/ITask";
+import { RootState } from "../../../store";
+import { selectTaskById } from "@features/tasks/redux/tasksSelectors";
 
 export interface SelectedTaskContextType {
   selectedTask: ITask | null;
-  setSelectedTask: React.Dispatch<React.SetStateAction<ITask | null>>;
+  setSelectedTaskId: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 export const SelectedTaskContext =
@@ -14,14 +17,17 @@ export const SelectedTaskProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [selectedTask, setSelectedTask] = useState<ITask | null>(null);
+  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
+  const selectedTask = useSelector((state: RootState) =>
+    selectedTaskId ? selectTaskById(selectedTaskId)(state) : null
+  );
 
   const contextValue = useMemo(
     () => ({
       selectedTask,
-      setSelectedTask,
+      setSelectedTaskId,
     }),
-    [selectedTask]
+    [selectedTask, setSelectedTaskId]
   );
 
   return (

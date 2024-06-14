@@ -7,7 +7,7 @@ import { useSelectedTask } from "@features/tasks/hooks/useSelectedTask";
 
 export default function Home(): JSX.Element {
   const { user } = useUser();
-  const { setSelectedTask } = useSelectedTask();
+  const { setSelectedTaskId } = useSelectedTask();
 
   function getTimeOfDay() {
     const now = new Date();
@@ -24,7 +24,7 @@ export default function Home(): JSX.Element {
     }
   }
   return (
-    <Container onClick={() => setSelectedTask(null)} sx={{ pt: 4 }}>
+    <Container onClick={() => setSelectedTaskId(null)} sx={{ pt: 4 }}>
       <Typography variant="h6" align="center" paragraph>
         {new Date().toLocaleDateString("en-US", {
           weekday: "long",

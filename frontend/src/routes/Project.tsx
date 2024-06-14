@@ -11,7 +11,7 @@ export default function Project() {
     navigate("/");
     return null;
   }
-  const { setSelectedTask } = useSelectedTask();
+  const { setSelectedTaskId } = useSelectedTask();
   const { project } = useSelectedProject(projectId);
 
   if (!project) {
@@ -27,7 +27,7 @@ export default function Project() {
         flexShrink: 1,
         overflow: "auto",
       }}
-      onClick={() => setSelectedTask(null)}
+      onClick={() => setSelectedTaskId(null)}
     >
       <>
         <div>

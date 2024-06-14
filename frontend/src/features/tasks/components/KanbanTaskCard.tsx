@@ -17,7 +17,7 @@ import { useTaskInEdit } from "@features/tasks/hooks/useTaskInEdit";
 import MoreActionsButton from "./MoreActionsButton";
 
 const KanbanTaskCard = ({ task, index }: { task: ITask; index: number }) => {
-  const { setSelectedTask } = useSelectedTask();
+  const { setSelectedTaskId } = useSelectedTask();
   const { setTaskInEdit, taskInEdit } = useTaskInEdit();
 
   function handleTaskBlur() {
@@ -46,7 +46,7 @@ const KanbanTaskCard = ({ task, index }: { task: ITask; index: number }) => {
           <Card
             onClick={(e) => {
               e.stopPropagation();
-              setSelectedTask(task);
+              setSelectedTaskId(task.id);
             }}
             sx={{
               marginBottom: "15px",
