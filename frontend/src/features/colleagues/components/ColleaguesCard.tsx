@@ -3,6 +3,7 @@ import Avatar from "@mui/material/Avatar";
 import { Card, CardContent, CardHeader } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useColleagues } from "../hooks/useColleagues";
+import formatNameForAvatar from "@utils/formatNameForAvatar";
 
 export default function ColleaguesCard() {
   const { colleagues, loading } = useColleagues();
@@ -31,11 +32,7 @@ export default function ColleaguesCard() {
           return (
             <IconButton key={id} onClick={() => {}} sx={{ p: 0, margin: 2 }}>
               <Avatar sx={{ width: "70px", height: "70px" }}>
-                {colleagues[id].name
-                  .split(" ")
-                  .map((n) => n[0])
-                  .join(" ")
-                  .toLocaleUpperCase()}
+                {formatNameForAvatar(colleagues[id].name)}
               </Avatar>
             </IconButton>
           );

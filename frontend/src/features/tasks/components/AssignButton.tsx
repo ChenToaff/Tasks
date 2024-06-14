@@ -18,6 +18,7 @@ import Avatar from "@mui/material/Avatar";
 import useColleagueById from "@features/colleagues/hooks/useColleagueById";
 import { useUser } from "@features/user/hooks/useUser";
 import useUpdateEffect from "@hooks/useUpdateEffect";
+import formatNameForAvatar from "@utils/formatNameForAvatar";
 
 export default function AssignButton({ task }: { task: ITask }) {
   const { colleagues } = useColleagues();
@@ -56,11 +57,7 @@ export default function AssignButton({ task }: { task: ITask }) {
         <IconButton ref={buttonRef} onClick={() => setOpen(true)}>
           {assignee ? (
             <Avatar sx={{ width: "24px", height: "24px", fontSize: "small" }}>
-              {assignee.name
-                .split(" ")
-                .map((n) => n[0])
-                .join("")
-                .toLocaleUpperCase()}
+              {formatNameForAvatar(assignee.name)}
             </Avatar>
           ) : (
             <PersonOutlineOutlinedIcon />

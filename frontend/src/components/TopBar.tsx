@@ -16,6 +16,7 @@ import { useUser } from "@features/user/hooks/useUser";
 import { Logout, Person } from "@mui/icons-material";
 import { ListItemIcon } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import formatNameForAvatar from "@utils/formatNameForAvatar";
 
 function TopBar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -69,12 +70,7 @@ function TopBar() {
         <Box sx={{ flexGrow: 0 }}>
           <Tooltip title="Open settings">
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              <Avatar>
-                {user?.name
-                  .split(" ")
-                  .map((n) => n[0])
-                  .join(" ")}
-              </Avatar>
+              <Avatar>{formatNameForAvatar(user?.name ?? "")}</Avatar>
             </IconButton>
           </Tooltip>
           <Menu
