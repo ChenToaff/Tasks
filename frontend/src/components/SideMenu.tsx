@@ -5,8 +5,8 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
+import HomeIcon from "@mui/icons-material/Home";
+import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import { Box, IconButton } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
@@ -99,19 +99,28 @@ export default function SideMenu() {
         {open ? <ChevronLeftIcon /> : <ChevronRightIcon />}
       </IconButton>
       <List>
-        {Object.keys(navigation).map((key, index) => (
-          <ListItem key={key} disablePadding>
-            <ListItemButton
-              onClick={() => navigate(navigation[key])}
-              selected={location.pathname === navigation[key]}
-            >
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={key} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+        <ListItem disablePadding>
+          <ListItemButton
+            onClick={() => navigate("/home")}
+            selected={location.pathname === "/home"}
+          >
+            <ListItemIcon>
+              <HomeIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Home"} />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton
+            onClick={() => navigate("/tasks")}
+            selected={location.pathname === "/tasks"}
+          >
+            <ListItemIcon>
+              <TaskAltIcon />
+            </ListItemIcon>
+            <ListItemText primary={"My Tasks"} />
+          </ListItemButton>
+        </ListItem>
       </List>
       <Divider />
       <Box sx={{ overflowY: "auto" }}>
