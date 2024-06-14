@@ -1,6 +1,13 @@
 import { createSelector } from "@reduxjs/toolkit";
 import { RootState } from "../../../store";
 
+// Selector to get a task by ID
+export const selectTaskById = (taskId: string) =>
+  createSelector(
+    [(state: RootState) => state.tasks.tasks],
+    (tasks) => tasks[taskId]
+  );
+
 // Selector to get tasks by project ID
 export const selectTasksByProjectId = createSelector(
   [
