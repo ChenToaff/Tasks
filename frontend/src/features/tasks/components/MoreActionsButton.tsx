@@ -12,7 +12,7 @@ import TasksService from "../api/TasksService";
 
 export default function MoreActionsButton({ task }: { task: ITask }) {
   const [open, setOpen] = useState(false);
-  const { setTaskInEdit } = useTaskInEdit();
+  const { setTaskInEditId } = useTaskInEdit();
   const { setSelectedTaskId } = useSelectedTask();
   const buttonRef = useRef(null);
 
@@ -55,7 +55,7 @@ export default function MoreActionsButton({ task }: { task: ITask }) {
           horizontal: "right",
         }}
       >
-        <MenuItem onClick={() => setTaskInEdit(task)}>
+        <MenuItem onClick={() => setTaskInEditId(task.id)}>
           <ListItemIcon>
             <EditIcon fontSize="small" />
           </ListItemIcon>

@@ -19,7 +19,7 @@ const Kanban = ({ projectId }: { projectId: string }) => {
 
   const { project, isLoading } = useSelectedProject(projectId);
   const { setSelectedTaskId } = useSelectedTask();
-  const { setTaskInEdit } = useTaskInEdit();
+  const { setTaskInEditId } = useTaskInEdit();
 
   useEffect(() => {
     if (!isLoading) {
@@ -75,7 +75,7 @@ const Kanban = ({ projectId }: { projectId: string }) => {
       taskColumnId: column.id,
     }).then((newTask) => {
       if (newTask) {
-        setTaskInEdit(newTask);
+        setTaskInEditId(newTask.id);
       }
     });
   }

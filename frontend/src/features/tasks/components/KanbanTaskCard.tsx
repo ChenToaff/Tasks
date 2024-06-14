@@ -18,14 +18,14 @@ import MoreActionsButton from "./MoreActionsButton";
 
 const KanbanTaskCard = ({ task, index }: { task: ITask; index: number }) => {
   const { setSelectedTaskId } = useSelectedTask();
-  const { setTaskInEdit, taskInEdit } = useTaskInEdit();
+  const { setTaskInEditId, taskInEdit } = useTaskInEdit();
 
   function handleTaskBlur() {
-    setTaskInEdit((prevTask) => {
-      if (prevTask?.id === task.id) {
+    setTaskInEditId((prevId) => {
+      if (prevId === task.id) {
         return null;
       }
-      return prevTask;
+      return prevId;
     });
   }
   function handleTaskChange(
