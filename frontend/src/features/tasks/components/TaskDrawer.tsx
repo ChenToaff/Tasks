@@ -1,10 +1,12 @@
 import { useEffect, useRef } from "react";
 import { styled } from "@mui/material/styles";
-import { IconButton, Theme } from "@mui/material";
+import { Box, IconButton, Input, TextField, Theme } from "@mui/material";
 import MuiDrawer from "@mui/material/Drawer";
 import { CSSObject } from "@emotion/react";
 import CloseIcon from "@mui/icons-material/CloseOutlined";
 import { useSelectedTask } from "../hooks/useSelectedTask";
+import AssignButton from "./AssignButton";
+import TasksService from "../api/TasksService";
 const drawerWidth = 600;
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -68,6 +70,14 @@ export default function TaskDrawer() {
     };
   }, []);
 
+  function handleTaskChange(
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) {
+    if (!selectedTask) return;
+    const value = e.target.value || "";
+    TasksService.updateTask(selectedTask.id, { title: value });
+  }
+
   return (
     <Drawer
       variant="permanent"
@@ -77,25 +87,43 @@ export default function TaskDrawer() {
       onClose={() => setSelectedTask(null)}
     >
       {!!selectedTask && (
-        <IconButton
-          sx={{
-            width: "24px",
-            height: "24px",
-            right: 0,
-            zIndex: (theme) => theme.zIndex.drawer + 1,
+        <>
+          <IconButton
+            sx={{
+              width: "24px",
+              height: "24px",
+              right: 0,
+              zIndex: (theme) => theme.zIndex.drawer + 1,
 
-            background: "white",
-            "&:focus": {
-              outline: 0,
-            },
-          }}
-          onClick={() => setSelectedTask(null)}
-        >
-          <CloseIcon />
-        </IconButton>
+              background: "white",
+              "&:focus": {
+                outline: 0,
+              },
+            }}
+            onClick={() => setSelectedTask(null)}
+          >
+            <CloseIcon />
+          </IconButton>
+          <Input
+            sx={{
+              "&:before": {
+                borderBottom: "none",
+              },
+            }}
+            onChange={handleTaskChange}
+            placeholder="Write a task here"
+            defaultValue={selectedTask?.title}
+            inputProps={{ style: { fontSize: 40 } }} // font size of input text
+          />
+          <Box alignItems="center" display="flex">
+            <h3 style={{ width: "120px" }}>Assignee:</h3>
+            <AssignButton task={selectedTask} />
+          </Box>
+          <Box alignItems="center" display="flex">
+            <h3 style={{ width: "120px" }}>Project:</h3>
+          </Box>
+        </>
       )}
-      <h5>{selectedTask?.id}</h5>
-      <h1>{selectedTask?.title}</h1>
     </Drawer>
   );
 }
