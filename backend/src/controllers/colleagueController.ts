@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import asyncHandler from "../utils/asyncHandler";
 import * as ColleagueService from "../services/colleagueService";
+import * as UserService from "../services/userService";
 
 export const getColleagues = asyncHandler(
   async (req: Request, res: Response) => {
@@ -11,25 +12,25 @@ export const getColleagues = asyncHandler(
   }
 );
 
-// export const addColleague = asyncHandler(
-//   async (req: Request, res: Response) => {
-//     const newUser = await ColleaguesService.addColleague(req.body);
-//     res
-//       .status(201)
-//       .json({ message: `${newUser.username} was created successfully.` });
-//   }
-// );
+export const addColleague = asyncHandler(
+  async (req: Request, res: Response) => {
+    const userId = req.user!._id;
+    const { colleagueId } = req.body;
+    await UserService.findUserById(colleagueId);
+    await ColleagueService.addColleague(userId, colleagueId);
+    await ColleagueService.addColleague(colleagueId, userId);
+    res.status(200).json({ message: `The colleague was added.` });
+  }
+);
 
-// export const removeColleague = asyncHandler(
-//   async (req: Request, res: Response) => {
-//     const { username } = req.params;
-//     const updatedUser = await ColleaguesService.removeColleague(
-//       username,
-//       req.body
-//     );
-//     if (!updatedUser) {
-//       throw new ApiError(404, "User not found");
-//     }
-//     res.json(updatedUser);
-//   }
-// );
+export const removeColleague = asyncHandler(
+  async (req: Request, res: Response) => {
+    const userId = req.user!._id;
+    const { colleagueId } = req.body;
+    await UserService.findUserById(colleagueId);
+    await ColleagueService.removeColleague(userId, colleagueId);
+    await ColleagueService.removeColleague(colleagueId, userId);
+
+    res.status(200).json({ message: `The colleague was removed.` });
+  }
+);

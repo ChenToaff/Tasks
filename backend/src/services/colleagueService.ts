@@ -24,7 +24,7 @@ export const addColleague = async (
   const updatedUser = await UserModel.findByIdAndUpdate<IUser>(
     id,
     {
-      $push: { colleagues: colleagueId },
+      $addToSet: { colleagues: colleagueId },
     },
     { new: true }
   );
@@ -32,9 +32,10 @@ export const addColleague = async (
   return updatedUser;
 };
 
-// export const removeColleague = async (id: string): Promise<IUser | null> => {
-//   const deletedUser = await UserModel.findByIdAndDelete(id).select(
-//     "-_id -__v"
-//   );
-//   return deletedUser;
-// };
+export const removeColleague = async (id: string, colleagueId: string) => {
+  await UserModel.findByIdAndUpdate<IUser>(
+    id,
+    { $pull: { colleagues: colleagueId } },
+    { new: true, useFindAndModify: false }
+  );
+};
