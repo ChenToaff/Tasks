@@ -6,7 +6,7 @@ import { RootState } from "../../../store";
 export const loadInitialProjects = createAsyncThunk(
   "projects/loadInitial",
   async () => {
-    return ProjectService.fetchProjects(0, 8); // Load the first 10 projects initially
+    return ProjectService.fetchProjects(0, 8); // Load the first 8 projects initially
   }
 );
 
