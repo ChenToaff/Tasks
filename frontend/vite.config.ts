@@ -1,20 +1,33 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
+import dotenv from "dotenv";
+dotenv.config();
+
+let proxyConfig = {};
+if (process.env.NODE_ENV === "development") {
+  if (!process.env.API_PROXY) {
+    throw new Error(
+      "API_PROXY environment variable is required for development"
+    );
+  }
+
+  proxyConfig = {
+    "/api": {
+      target: process.env.API_PROXY,
+      rewrite: (path: string) => path.replace(/^\/api/, ""),
+    },
+    "/socket.io": {
+      target: process.env.API_PROXY,
+      ws: true,
+    },
+  };
+}
 
 export default defineConfig({
   plugins: [react()],
   server: {
-    proxy: {
-      "/api": {
-        target: "http://localhost:5000",
-        rewrite: (path) => path.replace(/^\/api/, ""),
-      },
-      "/socket.io": {
-        target: "http://localhost:5000",
-        ws: true,
-      },
-    },
+    proxy: proxyConfig,
   },
   resolve: {
     alias: {

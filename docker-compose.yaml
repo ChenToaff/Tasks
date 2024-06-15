@@ -1,0 +1,45 @@
+version: "3.8"
+
+services:
+  backend:
+    restart: always
+    build:
+      context: ./backend
+    container_name: backend
+    environment:
+      NODE_ENV: production
+      MONGO_URI: mongodb://mongodb:27017/taskManagement
+      REDIS_URI: redis://redis:6379
+    depends_on:
+      - mongodb
+      - redis
+
+  frontend:
+    restart: always
+    build:
+      context: ./frontend
+    container_name: frontend
+    depends_on:
+      - backend
+
+  nginx:
+    restart: always
+    image: nginx:alpine
+    container_name: nginx
+    ports:
+      - "3000:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - backend
+      - frontend
+
+  mongodb:
+    restart: always
+    image: mongo:latest
+    container_name: mongodb
+
+  redis:
+    restart: always
+    image: redis:latest
+    container_name: redis

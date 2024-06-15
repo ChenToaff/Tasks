@@ -9,13 +9,7 @@ import onConnection from "./events/onConnection";
 let io: SocketIOServer | null = null;
 
 const initializeWebsocket = (server: Server) => {
-  io = new SocketIOServer(server, {
-    cors: {
-      origin: "http://localhost:5173",
-      methods: ["GET", "POST"],
-      credentials: true,
-    },
-  });
+  io = new SocketIOServer(server);
 
   io.engine.use(onlyForHandshake(sessionMiddleware));
   io.engine.use(onlyForHandshake(passport.session()));

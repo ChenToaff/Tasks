@@ -1,6 +1,7 @@
 import mongoose, { ConnectOptions } from "mongoose";
 
-const mongoURI = "mongodb://localhost:27017/taskManagement";
+const mongoURI = process.env.MONGO_URI;
+if (!mongoURI) throw new Error("MONGO_URI is not defined!");
 
 const connectMongo = async () => {
   try {

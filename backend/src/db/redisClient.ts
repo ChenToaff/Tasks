@@ -1,10 +1,9 @@
 import { createClient, RedisClientOptions } from "redis";
 
+const redisURI = process.env.REDIS_URI;
+
 const redisClient = createClient({
-  host: "localhost",
-  port: 6379,
-  // url: 'redis://localhost:6379'
-  // password: 'redisPassword'
+  url: redisURI,
 } as RedisClientOptions);
 
 redisClient.on("error", (err: Error) => {

@@ -1,3 +1,5 @@
+import dotenv from "dotenv";
+dotenv.config();
 import express from "express";
 import routes from "./routes";
 import passport from "passport";
@@ -9,7 +11,7 @@ import errorHandler from "./middleware/errorHandler";
 import sessionMiddleware from "./middleware/sessionMiddleware";
 import { initializeWebsocket } from "./websocket";
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 
 connectMongo();
 redisClient.connect();
