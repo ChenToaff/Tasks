@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, TextField, Box, Typography } from "@mui/material";
 import useAuth from "@features/auth/hooks/useAuth";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
   const { login, isAuthenticated } = useAuth();
@@ -23,7 +23,9 @@ export default function Login() {
 
   return (
     <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
-      <Typography variant="h6">Login</Typography>
+      <Typography color="primary" variant="h4">
+        Login
+      </Typography>
       <TextField
         margin="normal"
         required
@@ -51,6 +53,12 @@ export default function Login() {
       <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
         Login
       </Button>
+      <Link
+        style={{ width: "100%", textAlign: "center", display: "block" }}
+        to="/signup"
+      >
+        Signup?
+      </Link>
     </Box>
   );
 }
