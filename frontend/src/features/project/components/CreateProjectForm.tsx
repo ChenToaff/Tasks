@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Button, TextField, Box } from "@mui/material";
-import IUser from "@interfaces/IUser";
 import ColleaguesSelect from "@features/colleague/components/ColleaguesSelect";
-import UserService from "@services/UserService";
 import ProjectService from "@features/project/api/ProjectService";
 import { useNavigate } from "react-router-dom";
 
@@ -11,18 +9,6 @@ const CreateProjectForm: React.FC = () => {
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [members, setMembers] = useState<string[]>([]);
-  const [users, setUsers] = React.useState<IUser[]>([]);
-
-  React.useEffect(() => {
-    const fetchUsers = async () => {
-      const usersData = await UserService.getAllUsers();
-      if (usersData) {
-        setUsers(usersData);
-      }
-    };
-
-    fetchUsers();
-  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,11 +44,7 @@ const CreateProjectForm: React.FC = () => {
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       />
-      <ColleaguesSelect
-        selected={members}
-        selectFrom={users}
-        setSelected={setMembers}
-      />
+      <ColleaguesSelect selected={members} setSelected={setMembers} />
       <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2 }}>
         Create
       </Button>

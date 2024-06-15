@@ -11,7 +11,6 @@ import { useColleagues } from "../hooks/useColleagues";
 
 interface ColleaguesSelectProps {
   selected: string[];
-  selectFrom: IUser[];
   setSelected: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
