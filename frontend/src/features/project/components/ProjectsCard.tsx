@@ -31,7 +31,7 @@ export default function ProjectsCard() {
       sx={{
         display: "flex",
         flexDirection: "column",
-        height: "330px",
+        height: "335px",
         ":hover": {
           border: "1px solid #afabac",
         },
