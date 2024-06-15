@@ -12,6 +12,7 @@ export interface ProjectsState {
   loading: boolean;
   error: string | undefined;
   canLoadMore: boolean;
+  initiallyLoaded: boolean;
 }
 
 const initialState: ProjectsState = {
@@ -19,6 +20,7 @@ const initialState: ProjectsState = {
   loading: false,
   error: undefined,
   canLoadMore: false,
+  initiallyLoaded: false,
 };
 
 const projectSlice = createSlice({
@@ -34,10 +36,12 @@ const projectSlice = createSlice({
         state.data = action.payload;
         state.canLoadMore = action.payload.length === 8;
         state.loading = false;
+        state.initiallyLoaded = true;
       })
       .addCase(loadInitialProjects.rejected, (state, action) => {
         state.error = action.error.message;
         state.canLoadMore = false;
+        state.initiallyLoaded = true;
         state.loading = false;
       })
       .addCase(loadMoreProjects.pending, (state) => {

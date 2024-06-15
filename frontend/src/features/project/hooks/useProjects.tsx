@@ -6,16 +6,17 @@ import { RootState, AppDispatch } from "../../../store";
 
 export function useProjects() {
   const dispatch = useDispatch<AppDispatch>();
-  const { data, loading, error, canLoadMore } = useSelector(
+  const { data, loading, error, canLoadMore, initiallyLoaded } = useSelector(
     (state: RootState) => state.projects
   );
 
   // Initially load projects
   useEffect(() => {
-    if (data.length === 0 && !loading && !error) {
+    if (!initiallyLoaded && !loading && !error) {
+      console.log({ initiallyLoaded, loading, error });
       dispatch(loadInitialProjects());
     }
-  }, [dispatch, data.length, loading, error]);
+  }, [dispatch, data.length, loading, error, initiallyLoaded]);
 
   // Function to trigger loading more projects
   const loadMore = () => {
