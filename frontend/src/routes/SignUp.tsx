@@ -40,6 +40,8 @@ export default function SignUp() {
         margin="normal"
         required
         fullWidth
+        inputProps={{ pattern: "^(?=.*[a-z])(?=.*[A-Z])(?=.*d)[a-zA-Zd]{8,}$" }}
+        title="Password must be at least 8 characters long, include at least one uppercase letter, and one number."
         label="Password"
         type="password"
         value={password}
