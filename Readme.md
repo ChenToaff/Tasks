@@ -44,3 +44,9 @@ A Docker Compose file is provided for easy setup.
 4. Access the application at `http://localhost:3000`
 
 For production, NGINX is used as a reverse proxy for the backend and frontend. Make sure to configure NGINX accordingly.
+
+## Screenshots
+
+![Screenshot 1](./assets/home-screen.png)
+![Screenshot 2](./assets/kanban.png)
+![Screenshot 2](./assets/assignee.png)
