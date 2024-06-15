@@ -1,7 +1,7 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import projectsReducer from "./features/projects/redux/projectsSlice.ts";
-import tasksReducer from "@features/tasks/redux/tasksSlice.ts";
-import colleaguesReducer from "@features/colleagues/redux/colleaguesSlice.ts";
+import projectsReducer from "./features/project/redux/projectSlice.ts";
+import tasksReducer from "@features/task/redux/taskSlice.ts";
+import colleaguesReducer from "@features/colleague/redux/colleagueSlice.ts";
 import authReducer from "@features/auth/redux/authSlice.ts";
 
 const appReducer = combineReducers({

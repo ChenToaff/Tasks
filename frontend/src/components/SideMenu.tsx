@@ -15,7 +15,7 @@ import { useState } from "react";
 import { styled, Theme, CSSObject } from "@mui/material/styles";
 import DrawerHeader from "./DrawerHeader";
 import { useNavigate } from "react-router-dom";
-import ProjectSideBarList from "@features/projects/components/ProjectSideBarList";
+import ProjectSideBarList from "@features/project/components/ProjectSideBarList";
 const drawerWidth = 240;
 
 const openedMixin = (theme: Theme): CSSObject => ({

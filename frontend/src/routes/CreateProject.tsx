@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import FolderIcon from "@mui/icons-material/ArrowBack";
-import CreateProjectForm from "@features/projects/components/CreateProjectForm";
+import CreateProjectForm from "@features/project/components/CreateProjectForm";
 
 export default function CreateProject(): JSX.Element {
   const navigate = useNavigate();

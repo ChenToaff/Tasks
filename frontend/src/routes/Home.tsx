@@ -1,9 +1,9 @@
 import { Box, Container, Typography } from "@mui/material";
-import { ColleaguesCard } from "@features/colleagues";
-import { ProjectsCard } from "@features/projects";
-import { TasksCard } from "@features/tasks";
+import { ColleaguesCard } from "@features/colleague";
+import { ProjectsCard } from "@features/project";
+import { TasksCard } from "@features/task";
 import useAuth from "@features/auth/hooks/useAuth";
-import { useSelectedTask } from "@features/tasks/hooks/useSelectedTask";
+import { useSelectedTask } from "@features/task/hooks/useSelectedTask";
 
 export default function Home(): JSX.Element {
   const { user } = useAuth();

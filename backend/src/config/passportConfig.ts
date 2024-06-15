@@ -1,7 +1,7 @@
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import * as authService from "../services/authService";
-import * as usersService from "../services/usersService";
+import * as userService from "../services/userService";
 import IUser from "../interfaces/IUser";
 
 // for req.user to use the IUser
@@ -31,7 +31,7 @@ passport.serializeUser((user: IUser, done) => {
 
 passport.deserializeUser(async (id: string, done) => {
   try {
-    const user = await usersService.findUserById(id);
+    const user = await userService.findUserById(id);
     if (user) {
       done(null, user);
     } else {

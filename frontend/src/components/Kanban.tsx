@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import KanbanTaskCard from "../features/tasks/components/KanbanTaskCard";
+import KanbanTaskCard from "../features/task/components/KanbanTaskCard";
 import { Box, IconButton, Typography } from "@mui/material";
 import ITaskColumn from "@interfaces/ITaskColumn";
-import TasksService from "@features/tasks/api/TasksService";
+import TaskService from "@features/task/api/TaskService";
 import AddIcon from "@mui/icons-material/Add";
-import useSelectedProject from "@features/projects/hooks/useSelectedProject";
-import { useSelectedTask } from "@features/tasks/hooks/useSelectedTask";
-import { useTaskInEdit } from "@features/tasks/hooks/useTaskInEdit";
-import ProjectsService from "@features/projects/api/ProjectsService";
+import useSelectedProject from "@features/project/hooks/useSelectedProject";
+import { useSelectedTask } from "@features/task/hooks/useSelectedTask";
+import { useTaskInEdit } from "@features/task/hooks/useTaskInEdit";
+import ProjectService from "@features/project/api/ProjectService";
 
 interface KanbanColumns {
   [id: string]: ITaskColumn;
@@ -38,7 +38,7 @@ const Kanban = ({ projectId }: { projectId: string }) => {
     const sourceColumn = columns[source.droppableId];
     const sourceTasks = [...sourceColumn.tasks];
     const [removed] = sourceTasks.splice(source.index, 1);
-    ProjectsService.changeTaskLocation({
+    ProjectService.changeTaskLocation({
       projectId: project!.id,
       taskId: removed.id,
       sourceColumnId: source.droppableId,
@@ -70,7 +70,7 @@ const Kanban = ({ projectId }: { projectId: string }) => {
   };
 
   function handleCreateNewTask(column: ITaskColumn) {
-    TasksService.createTask({
+    TaskService.createTask({
       projectId,
       taskColumnId: column.id,
     }).then((newTask) => {

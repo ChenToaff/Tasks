@@ -1,9 +1,9 @@
 import { Router } from "express";
-import usersRoutes from "./users";
-import tasksRoutes from "./tasks";
-import projectsRoutes from "./projects";
-import authRoutes from "./auth";
-import colleaguesRoutes from "./colleagues";
+import usersRoutes from "./userRoutes";
+import tasksRoutes from "./taskRoutes";
+import projectsRoutes from "./projectRoutes";
+import authRoutes from "./authRoutes";
+import colleaguesRoutes from "./colleagueRoutes";
 import authMiddleware from "../middleware/authMiddleware";
 
 const router = Router();

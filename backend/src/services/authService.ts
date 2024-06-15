@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import * as UsersService from "../services/usersService";
+import * as UserService from "./userService";
 import IUser from "../interfaces/IUser";
 
 export const authenticateUser = async (
@@ -7,7 +7,7 @@ export const authenticateUser = async (
   password: string
 ): Promise<IUser | null> => {
   try {
-    const user = await UsersService.findUserByUsername(username);
+    const user = await UserService.findUserByUsername(username);
     if (user && bcrypt.compareSync(password, user.passwordHash)) {
       return user;
     }

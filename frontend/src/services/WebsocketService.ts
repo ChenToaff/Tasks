@@ -6,13 +6,13 @@ import {
   updateTask,
   removeTask,
   updateTaskColumn,
-} from "@features/tasks/redux/tasksSlice";
+} from "@features/task/redux/taskSlice";
 import {
   removeTaskFromProject,
   updateTaskInProject,
   addTaskToProject,
   changeTaskLocation,
-} from "@features/projects/redux/projectsSlice";
+} from "@features/project/redux/projectSlice";
 
 class SocketService {
   private socket: Socket | null = null;

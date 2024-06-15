@@ -1,8 +1,8 @@
 import Kanban from "@components/Kanban";
 import { Box } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
-import useSelectedProject from "@features/projects/hooks/useSelectedProject";
-import { useSelectedTask } from "@features/tasks/hooks/useSelectedTask";
+import useSelectedProject from "@features/project/hooks/useSelectedProject";
+import { useSelectedTask } from "@features/task/hooks/useSelectedTask";
 
 export default function Project() {
   const { projectId } = useParams<{ projectId: string }>();
