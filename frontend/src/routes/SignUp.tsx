@@ -1,50 +1,49 @@
 import React, { useState } from "react";
 import { Button, TextField, Box, Typography } from "@mui/material";
+import UserService from "@features/user/api/UserService";
 
 export default function SignUp() {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
-
-  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.target.value);
-  };
-
-  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(event.target.value);
-  };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log("Email:", email, "Password:", password);
-    // Add form submission logic here
+    UserService.signup({ username, name, password }).then(() => {
+      window.location.reload();
+    });
   };
 
   return (
     <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
-      <Typography variant="h6">Sign Up</Typography>
+      <Typography color="primary" variant="h4">
+        Sign Up
+      </Typography>
       <TextField
         margin="normal"
         required
         fullWidth
-        id="email"
-        label="Email Address"
-        name="email"
-        autoComplete="email"
+        label="Username"
         autoFocus
-        value={email}
-        onChange={handleEmailChange}
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
       />
       <TextField
         margin="normal"
         required
         fullWidth
-        name="password"
+        label="Name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
+      <TextField
+        margin="normal"
+        required
+        fullWidth
         label="Password"
         type="password"
-        id="password"
-        autoComplete="current-password"
         value={password}
-        onChange={handlePasswordChange}
+        onChange={(e) => setPassword(e.target.value)}
       />
       <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
         Sign Up

@@ -27,7 +27,7 @@ const Router: React.FC = (): ReactElement => {
         </Route>
 
         <Route element={<FormLayout />}>
-          <Route path="signUp" element={<SignUp />} />
+          <Route path="signup" element={<SignUp />} />
           <Route path="login" element={<Login />} />
         </Route>
 
