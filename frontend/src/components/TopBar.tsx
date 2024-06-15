@@ -9,7 +9,8 @@ import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
-import { useAuth } from "@features/auth/hooks/useAuth";
+import useAuth from "@features/auth/hooks/useAuth";
+
 import { Logout, Person } from "@mui/icons-material";
 import { ListItemIcon } from "@mui/material";
 import formatNameForAvatar from "@utils/formatNameForAvatar";
@@ -36,8 +37,7 @@ function TopBar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-  const { user } = useAuth();
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
   return (
     <AppBar
       position="fixed"

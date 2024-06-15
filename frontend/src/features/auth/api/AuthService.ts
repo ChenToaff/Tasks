@@ -20,21 +20,12 @@ class AuthService {
   }
 
   async logout(): Promise<void> {
-    try {
-      await axios.post(`${API_URL}/logout`);
-    } catch (error) {
-      console.error("Logout failed", error);
-    }
+    await axios.post(`${API_URL}/logout`);
   }
 
-  async checkAuthStatus(): Promise<IUser | null> {
-    try {
-      const response = await axios.get(`${API_URL}/status`);
-      return response.data.user;
-    } catch (error) {
-      console.error("Authentication check failed", error);
-      return null;
-    }
+  async checkAuthStatus(): Promise<IUser> {
+    const response = await axios.get(`${API_URL}/status`);
+    return response.data.user;
   }
 }
 

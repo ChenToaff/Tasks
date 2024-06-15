@@ -2,7 +2,7 @@ import { Box, Container, Typography } from "@mui/material";
 import { ColleaguesCard } from "@features/colleagues";
 import { ProjectsCard } from "@features/projects";
 import { TasksCard } from "@features/tasks";
-import { useAuth } from "@features/auth/hooks/useAuth";
+import useAuth from "@features/auth/hooks/useAuth";
 import { useSelectedTask } from "@features/tasks/hooks/useSelectedTask";
 
 export default function Home(): JSX.Element {

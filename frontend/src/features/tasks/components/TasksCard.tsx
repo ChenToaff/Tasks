@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, List } from "@mui/material";
-import { useAuth } from "@features/auth/hooks/useAuth";
+import useAuth from "@features/auth/hooks/useAuth";
 import useTasks from "../hooks/useTasks";
 import TasksCardItem from "./TasksCardItem";
 import { Link } from "react-router-dom";

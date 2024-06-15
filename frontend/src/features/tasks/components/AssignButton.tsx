@@ -16,7 +16,7 @@ import ITask from "@interfaces/ITask";
 import TasksService from "../api/TasksService";
 import Avatar from "@mui/material/Avatar";
 import useColleagueById from "@features/colleagues/hooks/useColleagueById";
-import { useAuth } from "@features/auth/hooks/useAuth";
+import useAuth from "@features/auth/hooks/useAuth";
 import useUpdateEffect from "@hooks/useUpdateEffect";
 import formatNameForAvatar from "@utils/formatNameForAvatar";
 
