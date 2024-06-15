@@ -6,6 +6,7 @@ import Home from "./Home";
 import Login from "./Login";
 import CreateProject from "./CreateProject";
 import ProtectedRoute from "@components/ProtectedRoute";
+import CheckAuthStatus from "@features/auth/components/CheckAuthStatus";
 const Project = lazy(() => import("@routes/Project"));
 const Tasks = lazy(() => import("@routes/Tasks"));
 const SignUp = lazy(() => import("@routes/SignUp"));
@@ -14,6 +15,7 @@ const SignUp = lazy(() => import("@routes/SignUp"));
 const Router: React.FC = (): ReactElement => {
   return (
     <BrowserRouter>
+      <CheckAuthStatus />
       <Routes>
         <Route element={<ProtectedRoute />}>
           <Route path="projects/new" element={<CreateProject />} />
