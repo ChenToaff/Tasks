@@ -6,6 +6,6 @@
  * - Minimum length of 8 characters
  */
 export const validatePassword = (password: string): boolean => {
-  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+  const regex = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{6,}$/;
   return regex.test(password);
 };

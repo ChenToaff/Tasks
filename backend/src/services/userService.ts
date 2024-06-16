@@ -120,7 +120,7 @@ export const findUserByUsername = async (
 export const createUser = async (data: CreateUserData): Promise<IUser> => {
   if (!validatePassword(data.password)) {
     throw new ValidationError(
-      "Password must be at least 8 characters long, include at least one uppercase letter, and one number."
+      "Password must be at least 6 characters long and contain at least one uppercase letter, one lowercase letter, and one digit"
     );
   }
 
@@ -142,7 +142,7 @@ export const updateUser = async (
   if (data.password) {
     if (!validatePassword(data.password)) {
       throw new ValidationError(
-        "Password must be at least 8 characters long, include at least one uppercase letter, and one number."
+        "Password must be at least 6 characters long and contain at least one uppercase letter, one lowercase letter, and one digit"
       );
     }
     data.password = await bcrypt.hash(data.password, 10);
