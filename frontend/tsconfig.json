@@ -20,6 +20,7 @@
       "@customTypes/*": ["./types/*"],
       "@interfaces/*": ["./interfaces/*"],
       "@utils/*": ["./utils/*"],
+      "@lib/*": ["./lib/*"],
       "@/*": ["./src/*"]
     },
     /* Bundler mode */

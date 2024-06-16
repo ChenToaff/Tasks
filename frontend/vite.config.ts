@@ -44,6 +44,7 @@ export default defineConfig({
       "@customTypes": path.resolve(__dirname, "./src/types"),
       "@interfaces": path.resolve(__dirname, "./src/interfaces"),
       "@utils": path.resolve(__dirname, "./src/utils"),
+      "@lib": path.resolve(__dirname, "./src/lib"),
     },
   },
 });
