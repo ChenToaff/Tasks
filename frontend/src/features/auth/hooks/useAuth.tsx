@@ -7,14 +7,13 @@ import {
 import { RootState, AppDispatch } from "../../../store";
 import { Credentials } from "@customTypes/credentials";
 import IUser from "@interfaces/IUser";
-import { useEffect } from "react";
 
 interface UseAuthResult {
   isAuthenticated: boolean;
   user: IUser | null;
   error: string | undefined;
   loading: boolean;
-  login: (credentials: Credentials) => void;
+  login: (credentials: Credentials) => Promise<any>;
   logout: () => void;
   checkStatus: () => void;
 }
@@ -30,7 +29,7 @@ const useAuth = (): UseAuthResult => {
   };
 
   const handleLogin = (credentials: Credentials) => {
-    dispatch(login(credentials));
+    return dispatch(login(credentials)).unwrap();
   };
 
   const handleLogout = () => {
