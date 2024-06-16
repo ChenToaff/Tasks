@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Button, TextField, Box, Typography } from "@mui/material";
+import { Button, TextField, Box, Typography, Alert } from "@mui/material";
 import useAuth from "@features/auth/hooks/useAuth";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
   const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
-
+  const [error, setError] = useState("");
   const [username, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -18,7 +18,9 @@ export default function Login() {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    login({ username, password });
+    login({ username, password }).catch((e) => {
+      setError(e.message);
+    });
   };
 
   return (
@@ -53,12 +55,8 @@ export default function Login() {
       <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
         Login
       </Button>
-      <Link
-        style={{ width: "100%", textAlign: "center", display: "block" }}
-        to="/signup"
-      >
-        Signup?
-      </Link>
+      <p>Don't have an account? {<Link to="/signup">Sign up</Link>}</p>
+      {error && <Alert severity="error">{error}</Alert>}
     </Box>
   );
 }
