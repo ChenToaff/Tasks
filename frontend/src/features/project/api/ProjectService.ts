@@ -1,6 +1,6 @@
 import ChangeTaskLocationProps from "@customTypes/changeTaskLocationProps";
 import IProject from "@interfaces/IProject";
-import axios from "axios";
+import axios from "@lib/axiosInstance";
 
 const API_URL = "/api/projects";
 

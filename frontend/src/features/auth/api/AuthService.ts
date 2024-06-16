@@ -1,5 +1,5 @@
 import IUser from "@interfaces/IUser";
-import axios from "axios";
+import axios from "@lib/axiosInstance";
 
 const API_URL = "/api/auth";
 
@@ -9,14 +9,9 @@ export interface Credentials {
 }
 
 class AuthService {
-  async login(credentials: Credentials): Promise<IUser | null> {
-    try {
-      const response = await axios.post(`${API_URL}/login`, credentials);
-      return response.data.user;
-    } catch (error) {
-      console.error("Login failed", error);
-      return null;
-    }
+  async login(credentials: Credentials) {
+    const response = await axios.post(`${API_URL}/login`, credentials);
+    return response.data.user;
   }
 
   async logout(): Promise<void> {

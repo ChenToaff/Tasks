@@ -1,6 +1,6 @@
 import SignupData from "@customTypes/SignupData";
 import IUser from "@interfaces/IUser";
-import axios from "axios";
+import axios from "@lib/axiosInstance";
 
 const API_URL = "/api/users";
 
