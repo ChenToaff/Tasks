@@ -47,8 +47,22 @@ For production, NGINX is used as a reverse proxy for the backend and frontend. M
 
 ## Screenshots
 
+### Login
+
 ![Screenshot 1](./assets/login.png)
+
+### Signup
+
 ![Screenshot 2](./assets/signup.png)
+
+#### Home
+
 ![Screenshot 3](./assets/home-screen.png)
+
+### Project
+
 ![Screenshot 4](./assets/kanban.png)
+
+### Select Assignee
+
 ![Screenshot 5](./assets/assignee.png)
