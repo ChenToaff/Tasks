@@ -8,10 +8,9 @@ export default function errorHandler(
   next: NextFunction
 ): void {
   if (error instanceof ApiError) {
-    res.status(error.statusCode).send(error.message);
-  } else if (error instanceof Error) {
-    res.status(500).send(error.message); // Default to 500 if error is not an ApiError
+    res.status(error.statusCode).json({ message: error.message });
   } else {
-    res.status(500).send("An unknown error occurred");
+    console.log(error);
+    res.status(500).json({ message: "Internal server Error" });
   }
 }
