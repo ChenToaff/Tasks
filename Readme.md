@@ -1,6 +1,6 @@
 # Tasks
 
-Tasks is a full-stack task management web application designed to showcase my skills as a developer. It allows users to create projects, add colleagues, and manage tasks within those projects using a Kanban board. The project utilizes WebSocket.io for real-time updates.
+Tasks is a comprehensive full-stack task management web application designed to enhance team collaboration and productivity. The application allows users to create projects, invite colleagues, and manage tasks seamlessly through an intuitive Kanban board interface. With real-time updates powered by WebSocket.io, users experience smooth and immediate synchronization across their tasks and projects.
 
 ## Technologies Used
 
